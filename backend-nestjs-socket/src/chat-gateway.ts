@@ -1,5 +1,3 @@
-import * as Redis from 'ioredis';
-
 import {
   MessageBody,
   SubscribeMessage,
@@ -11,7 +9,6 @@ import {
 export class ChatGateway {
   @WebSocketServer()
   server;
-  private redisClient: Redis.Redis;
 
   @SubscribeMessage('message')
   handleMessage(@MessageBody() message: string): void {
