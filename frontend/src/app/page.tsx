@@ -2,30 +2,33 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import ChatMessage from "./components/chatMessage/chatMessage";
+import { useStore } from "@/store";
 
 export default function Home() {
-  const [socket, setSocket] = useState<any>(undefined);
-  const [messages, setMessage] = useState("");
-  const [roomName, setRooName] = useState("");
-
-  const handlerSendMessage = () => {
-    console.log("click");
-    socket.emit("message", { data: messages, clientId: socket.id });
-  };
+  const [currentMessage, setCurrentMessage] = useState("");
+  const { setSocket, getSocket } = useStore();
 
   useEffect(() => {
     const socket = io("ws://localhost:3001");
     socket.on("message", () => {
-      setMessage(messages);
+      setCurrentMessage(currentMessage);
     });
-    console.log("socket", socket);
     setSocket(socket);
   }, []);
+
+  const handlerSendMessage = () => {
+    console.log("click");
+    getSocket().emit("message", {
+      data: currentMessage,
+      clientId: getSocket().id,
+    });
+  };
 
   return (
     <ChatMessage
       handlerSendMessage={handlerSendMessage}
-      setMessage={setMessage}
+      setMessage={setCurrentMessage}
+      currentMessage={currentMessage}
     />
   );
 }

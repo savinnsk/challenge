@@ -1,16 +1,28 @@
+import { useStore } from "@/store";
+
 interface ChatMessageProps {
   handlerSendMessage: () => void;
   setMessage: (message: string) => void;
+  currentMessage: string;
 }
 
 export default function ChatMessage(props: ChatMessageProps) {
+  const { getMessages, setMessage } = useStore();
+
   return (
     <div className="bg-slate-50 dark:bg-slate-900 p-8  text-slate-900 dark:text-slate-100 h-screen flex flex-col items-center text-center ">
       <div className="max-w-2xl">
         <h1 className="font-bold text-3xl sm:text3xl lg:text-5xl">
-          bg-slate-50 dark:bg-slate-900 p-8 text-slate-900 dark:text-slate-100
-          h-screen flex flex-col items-center text-center
+          Assunto : Camisa Do Pelé
         </h1>
+
+        <div className="messages-container">
+          {getMessages().map((msg, index) => (
+            <div key={index} className="message">
+              {msg}
+            </div>
+          ))}
+        </div>
 
         <input
           type="text"

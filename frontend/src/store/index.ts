@@ -1,27 +1,27 @@
 import { create } from "zustand";
+import { io, Socket } from "socket.io-client";
 
 interface ChatStore {
+  socket: Socket | any;
   messages: string[];
-  room: string | null;
-  isLoading: boolean;
+
   getMessages: () => string[];
-  sendMessage: (message: string) => void;
-  setRoom: (room: string) => void;
+  setMessage: (message: string) => void;
+  setSocket: (socket: Socket) => void;
+  getSocket: () => Socket | any;
 }
 
 export const useStore = create<ChatStore>((set, get) => {
   return {
     messages: [],
-    room: null,
-    isLoading: false,
+    socket: null,
 
     getMessages: () => get().messages,
-
-    sendMessage: (message: string) => {
+    setMessage: (message: string) => {
       const currentMessages = get().messages;
       set({ messages: [...currentMessages, message] });
     },
-
-    setRoom: (room: string) => set({ room }),
+    setSocket: (socket: any) => set({ socket: socket }),
+    getSocket: () => get().socket,
   };
 });
