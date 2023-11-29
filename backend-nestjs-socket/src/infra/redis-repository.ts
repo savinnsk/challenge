@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { RedisService } from 'src/config/redis';
 
 @Injectable()
-export class RedisUserRepository {
+export class RedisRepository {
   constructor(private readonly redis: RedisService) {}
 
-  async findMany() {
-    const users = await this.redis.get('users');
-    if (!users) return null;
+  async getMessagesChat() {
+    const messages = await this.redis.get('messages');
+    if (!messages) return null;
 
-    return JSON.parse(users);
+    return JSON.parse(messages);
   }
 
-  async create(key: string, value: any, exp?: number) {
+  async addMessageChat(key: string, value: any, exp?: number) {
     const stringValue = JSON.stringify(value);
     await this.redis.set(key, stringValue, 'EX', exp);
   }

@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatGateway } from './chat-gateway';
 import { RedisService } from './config/redis';
-import { RedisUserRepository } from './infra/redis-repository';
+import { RedisRepository } from './infra/redis-repository';
 
 @Module({
   imports: [
@@ -14,6 +14,6 @@ import { RedisUserRepository } from './infra/redis-repository';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway, RedisUserRepository, RedisService],
+  providers: [AppService, ChatGateway, RedisRepository, RedisService],
 })
 export class AppModule {}
