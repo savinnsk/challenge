@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 export default function Home() {
-  const [socket, setSocket] = useState(undefined);
+  const [socket, setSocket] = useState<any>(undefined);
+  const [message, setMessage] = useState("");
+  const [roomName, setRooName] = useState("");
+
+  const handlerSendMessage = () => {
+    socket.emit("message", message, roomName);
+  };
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
+    setSocket(socket);
   }, []);
 
   return (
