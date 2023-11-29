@@ -3,12 +3,17 @@ import { create } from "zustand";
 interface ChatStore {
   messages: string[];
   room: string | null;
+  isLoading: boolean;
+  getMessages: () => string[];
+  sendMessage: (message: string) => void;
+  setRoom: (room: string) => void;
 }
 
 export const useStore = create<ChatStore>((set, get) => {
   return {
     messages: [],
     room: null,
+    isLoading: false,
 
     getMessages: () => get().messages,
 
