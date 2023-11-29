@@ -1,4 +1,3 @@
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import * as Redis from 'ioredis';
 
 import {
