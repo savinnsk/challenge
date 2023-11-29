@@ -1,4 +1,5 @@
 import { useStore } from "@/store";
+import { useEffect } from "react";
 
 interface ChatMessageProps {
   handlerSendMessage: () => void;
@@ -7,7 +8,7 @@ interface ChatMessageProps {
 }
 
 export default function ChatMessage(props: ChatMessageProps) {
-  const { getMessages, setMessage } = useStore();
+  const { getMessages } = useStore();
 
   return (
     <div className="bg-slate-50 dark:bg-slate-900 p-8  text-slate-900 dark:text-slate-100 h-screen flex flex-col items-center text-center ">

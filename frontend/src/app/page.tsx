@@ -6,24 +6,32 @@ import { useStore } from "@/store";
 
 export default function Home() {
   const [currentMessage, setCurrentMessage] = useState("");
-  const { setSocket, getSocket } = useStore();
+
+  const socket = io("ws://localhost:3001");
 
   useEffect(() => {
-    const socket = io("ws://localhost:3001");
     socket.on("message", () => {
       setCurrentMessage(currentMessage);
     });
-    setSocket(socket);
   }, []);
+
+  const handlerSocket = () => {};
 
   const handlerSendMessage = () => {
     console.log("click");
-    getSocket().emit("message", {
+    socket.emit("message", {
       data: currentMessage,
-      clientId: getSocket().id,
+      clientId: socket.id,
     });
   };
 
+  const getMessages = () => {
+    socket.emit("getAllMessagesRoom", "default");
+    socket.on("getAllMessagesRoom", (messages) => {
+      console.log("Received messages:", messages);
+    });
+  };
+  getMessages();
   return (
     <ChatMessage
       handlerSendMessage={handlerSendMessage}

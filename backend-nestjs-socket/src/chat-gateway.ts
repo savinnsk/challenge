@@ -14,8 +14,20 @@ export class ChatGateway {
   constructor(private readonly redisRepository: RedisRepository) {}
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string): void {
-    console.log(message);
-    this.server.emit('message', message);
+  async handleMessage(@MessageBody() data: any): Promise<void> {
+    data.room = 'default';
+    this.redisRepository.addMessageChat(data.room, data.clientId, data.data);
+    const messages = await this.redisRepository.getMessagesByRoomChat(
+      data.room,
+    );
+    this.server.emit('message', messages);
+  }
+
+  @SubscribeMessage('getAllMessagesRoom')
+  async getAllMessagesRoom(room: string): Promise<void> {
+    room = 'default';
+
+    const messages = await this.redisRepository.getMessagesByRoomChat(room);
+    this.server.emit('getAllMessagesRoom', messages);
   }
 }

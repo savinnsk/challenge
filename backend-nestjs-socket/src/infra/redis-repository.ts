@@ -5,15 +5,18 @@ import { RedisService } from 'src/config/redis';
 export class RedisRepository {
   constructor(private readonly redis: RedisService) {}
 
-  async getMessagesChat() {
-    const messages = await this.redis.get('messages');
-    if (!messages) return null;
-
-    return JSON.parse(messages);
+  async getMessagesByRoomChat(room: string) {
+    const messages = await this.redis.lrange(room, 0, -1);
+    return messages.map((message) => JSON.parse(message));
   }
 
-  async addMessageChat(key: string, value: any, exp?: number) {
-    const stringValue = JSON.stringify(value);
-    await this.redis.set(key, stringValue, 'EX', exp);
+  async addMessageChat(room: string, clientId: string, message: string) {
+    try {
+      console.log(clientId);
+      const jsonMessage = JSON.stringify({ clientId, message });
+      await this.redis.rpush(room, jsonMessage);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
