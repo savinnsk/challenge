@@ -25,19 +25,17 @@ export default function ChatMessage() {
       });
       socket.on("getAllMessagesRoom", (messages) => {
         setChatMessages(messages);
-        console.log("Received messages:", messages);
       });
     }
   }, [socket]);
 
+  useEffect(() => {
+    setCurrentMessage("");
+  }, [chatMessages]);
+
   const handlerEnterAtRoom = () => {
     if (socket) {
       socket.emit("getAllMessagesRoom", "default");
-      socket.on("getAllMessagesRoom", (messages: any[]) => {
-        setMessages([]);
-        setMessages(messages);
-        console.log("Received messages:", messages);
-      });
     }
   };
 
@@ -71,7 +69,11 @@ export default function ChatMessage() {
         <input
           type="text"
           name="message"
-          onChange={(e) => setCurrentMessage(e.target.value)}
+          value={currentMessage}
+          onChange={(e) => {
+            e.persist();
+            setCurrentMessage(e.target.value);
+          }}
           className="bg-slate-50 dark:bg-slate-900 p-8  text-slate-900 dark:text-slate-100 outline outline-offset-2 flex-1  outline-2  rounded px-2 py-1 m-3"
         ></input>
 
