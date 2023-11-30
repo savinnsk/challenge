@@ -79,12 +79,6 @@ export default function ChatMessage() {
           >
             Enviar
           </button>
-          <button
-            onClick={handlerEnterAtRoom}
-            className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded font-medium"
-          >
-            Entrar
-          </button>
         </div>
       </div>
     </div>
