@@ -22,14 +22,7 @@ export const SideBar = () => {
         <RoomNavigation />
 
         <div className="mt-auto flex flex-col ">
-          <div>
-            {/* <a
-              href=""
-              className="hover:bg-blue-300 bg-red-400 text-white font-medium rounded px-3 py-2"
-            >
-              Sair
-            </a> */}
-          </div>
+          <div></div>
         </div>
       </Collapsible.Content>
     </Collapsible.Root>
