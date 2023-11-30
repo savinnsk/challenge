@@ -733,6 +733,11 @@
     path-to-regexp "3.2.0"
     tslib "2.6.2"
 
+"@nestjs/mapped-types@*":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-2.0.4.tgz#97280b06bf85d34ea9bad1e847e5e3cbaca8f04f"
+  integrity sha512-xl+gUSp0B+ln1VSNoUftlglk8dfpUes3DHGxKZ5knuBxS5g2H/8p9/DSBOYWUfO5f4u9s6ffBPZ71WO+tbe5SA==
+
 "@nestjs/microservices@^10.2.10":
   version "10.2.10"
   resolved "https://registry.yarnpkg.com/@nestjs/microservices/-/microservices-10.2.10.tgz#f78dbec9fe3c22fe109c47ebc8a9eb8bd34c3cea"
