@@ -4,6 +4,9 @@ const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        app: "minmax(18rem, 20rem) 1fr",
+      },
       colors: {
         purple: "#8257e6",
       },
