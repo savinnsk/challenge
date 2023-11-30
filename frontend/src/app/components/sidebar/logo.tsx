@@ -1,6 +1,6 @@
 export function Logo(props: any) {
   return (
-    <strong className="flex items-center gap-2 text-xl font-regular text-zinc-900">
+    <strong className="flex items-center gap-2 text-xl font-regular text-zinc-900 mx-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="38.000000pt"
