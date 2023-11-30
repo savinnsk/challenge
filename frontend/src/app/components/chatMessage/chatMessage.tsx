@@ -4,13 +4,15 @@ import { useStore } from "@/store";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 export default function ChatMessage() {
-  const { getMessages, setSocket, socket, setMessages } = useStore();
+  const { setSocket, socket, setMessages } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState<any>([]);
 
   useEffect(() => {
     let socketInit = io("ws://localhost:3001");
     setSocket(socketInit);
 
+    socketInit.emit("joinRoom", "default");
     return () => {
       socketInit.disconnect();
     };
@@ -18,21 +20,36 @@ export default function ChatMessage() {
 
   useEffect(() => {
     if (socket) {
-      socket.emit("getAllMessagesRoom", "default");
-      socket.on("getAllMessagesRoom", (messages: any[]) => {
-        setMessages(messages);
+      socket.on("message", (message) => {
+        setMessages((prevMessages: any) => [...prevMessages, message]);
+      });
+      socket.on("getAllMessagesRoom", (messages) => {
+        setChatMessages(messages);
         console.log("Received messages:", messages);
       });
     }
   }, [socket]);
 
-  console.log(getMessages());
+  const handlerEnterAtRoom = () => {
+    if (socket) {
+      socket.emit("getAllMessagesRoom", "default");
+      socket.on("getAllMessagesRoom", (messages: any[]) => {
+        setMessages([]);
+        setMessages(messages);
+        console.log("Received messages:", messages);
+      });
+    }
+  };
+
   const handlerSendMessage = () => {
-    console.log("click");
-    socket?.emit("message", {
-      data: currentMessage,
-      clientId: socket.id,
-    });
+    if (socket) {
+      socket.emit("message", {
+        data: currentMessage,
+        clientId: socket.id,
+      });
+      handlerEnterAtRoom();
+      setCurrentMessage("");
+    }
   };
 
   return (
@@ -43,8 +60,8 @@ export default function ChatMessage() {
         </h1>
 
         <div className="messages-container">
-          {getMessages().map((msg) => (
-            <p>
+          {chatMessages.map((msg: any, index: any) => (
+            <p key={index}>
               {" "}
               {msg.clientId} : {msg.message}
             </p>
@@ -63,6 +80,12 @@ export default function ChatMessage() {
           className="bg-sky-500 dark:bg-sky-400 text-white dark:bg-text-white enabled px-4 py-2 rounded-md font-medium mt-4 enabled:hover:bg-sky-600 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           Enviar
+        </button>
+        <button
+          onClick={handlerEnterAtRoom}
+          className="bg-sky-500 dark:bg-sky-400 text-white dark:bg-text-white enabled px-4 py-2 rounded-md font-medium mt-4 enabled:hover:bg-sky-600 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          entrar
         </button>
       </div>
     </div>

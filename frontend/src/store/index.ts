@@ -10,7 +10,7 @@ interface ChatStore {
   socket: Socket | null;
   setSocket: (socket: Socket) => void;
   getMessages: () => Message[];
-  setMessages: (messages: Message[]) => void;
+  setMessages: (messages: any) => void;
 }
 
 export const useStore = create<ChatStore>((set, get) => {
@@ -23,6 +23,10 @@ export const useStore = create<ChatStore>((set, get) => {
     setMessages: (messages: Message[]) => {
       const currentMessages = get().messages;
       set({ messages: [...currentMessages, ...messages] });
+    },
+    setMessage: (message: Message) => {
+      const currentMessages = get().messages;
+      set({ messages: [...currentMessages, message] });
     },
   };
 });
