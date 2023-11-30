@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-collapsible": "^1.0.3",
     "next": "^14.0.4-canary.25",
     "react": "^18",
     "react-dom": "^18",
