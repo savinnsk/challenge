@@ -7,12 +7,14 @@ export class RedisRepository {
 
   async getMessagesByRoomChat(room: string) {
     const messages = await this.redis.lrange(room, 0, -1);
-    return messages.map((message) => JSON.parse(message));
+    const result = messages.map((message) => JSON.parse(message));
+
+    return result;
   }
 
   async addMessageChat(room: string, clientId: string, message: string) {
     try {
-      console.log(clientId);
+      console.log(clientId, message);
       const jsonMessage = JSON.stringify({ clientId, message });
       await this.redis.rpush(room, jsonMessage);
     } catch (e) {

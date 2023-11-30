@@ -17,10 +17,6 @@ export class ChatGateway {
   async handleMessage(@MessageBody() data: any): Promise<void> {
     data.room = 'default';
     this.redisRepository.addMessageChat(data.room, data.clientId, data.data);
-    const messages = await this.redisRepository.getMessagesByRoomChat(
-      data.room,
-    );
-    this.server.emit('message', messages);
   }
 
   @SubscribeMessage('getAllMessagesRoom')
