@@ -12,8 +12,6 @@ export default function ChatMessage() {
     const socketInit = io("ws://localhost:3001");
     setSocket(socketInit);
 
-    socketInit.emit("joinRoom", "default");
-
     return () => {
       socketInit.disconnect();
     };

@@ -11,7 +11,7 @@ export function RoomItem({ title }: RooItemProps) {
 
   const handlerEnterAtRoom = () => {
     if (socket) {
-      socket.emit("getAllMessagesRoom", title);
+      socket.emit("getAllMessagesRoom", "default");
     }
   };
 
