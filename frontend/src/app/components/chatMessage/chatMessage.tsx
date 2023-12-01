@@ -62,7 +62,6 @@ export default function ChatMessage() {
       <h1 className="font-bold  text-2xl mb-12 text-center">
         Chat :{" "}
         <p className="font-semibold text-green-900">
-          {" "}
           {currentRoom
             ? currentRoom
             : "Nenhuma sala selecionada clique ao lado"}
@@ -89,7 +88,7 @@ export default function ChatMessage() {
 
           <button
             onClick={handlerSendMessage}
-            className="bg-sky-800 hover:bg-sky-700 text-white px-4 py-2 rounded font-medium"
+            className="bg-gray-500  hover:bg-gray-400 text-white px-4 py-2 rounded font-medium"
           >
             <Send />
           </button>
