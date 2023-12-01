@@ -5,13 +5,15 @@ interface Message {
   message: string;
   clientId: string;
 }
-interface ChatStore {
+interface Store {
   messages: Message[];
   socket: Socket | null;
+  error: string | null;
   setSocket: (socket: Socket) => void;
   getMessages: () => Message[];
   setMessages: (messages: any) => void;
   setFormValues: (formValues: Partial<FormValues>) => void;
+  setError: (error: string | null) => void;
 }
 
 interface FormValues {
@@ -21,15 +23,17 @@ interface FormValues {
   password: string;
 }
 
-export const useStore = create<ChatStore>((set, get) => {
+export const useStore = create<Store>((set, get) => {
   return {
     name: "",
     nickname: "",
     email: "",
     password: "",
+    error: null,
     messages: [],
     socket: null,
 
+    setError: (error: string | null) => set({ error }),
     setSocket: (socket: Socket) => set({ socket }),
     getMessages: () => get().messages,
     setMessages: (messages: Message[]) => {

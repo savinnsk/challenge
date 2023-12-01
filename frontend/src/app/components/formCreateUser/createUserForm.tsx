@@ -3,16 +3,27 @@
 import { CreateUserService } from "@/services/user-service";
 import { Logo } from "../sidebar/logo";
 import { useStore } from "@/store";
+import { CreateUserFormData, createUserSchema } from "@/schemas/form-schemas";
+import { ZodError } from "zod";
+import ErrorPopup from "../errorPopUp/errorPopUp";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
+  const { error, setError } = useStore();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
       const { name, nickname, email, password } = formData;
+
+      const data: CreateUserFormData = createUserSchema.parse({
+        name,
+        nickname,
+        email,
+        password,
+      });
       const user = await CreateUserService({ name, nickname, email, password });
 
       localStorage.setItem("userToken", user.accessToken);
@@ -20,7 +31,12 @@ export const CreateUserForm = () => {
 
       window.location.href = "/chat";
     } catch (error) {
-      console.error("Error creating user:", error);
+      if (error instanceof ZodError) {
+        const errorMessage = error.errors.map((err) => err.message).join("\n");
+        setError(errorMessage);
+      } else {
+        console.error("Error creating user:", error);
+      }
     }
   };
 
@@ -30,8 +46,13 @@ export const CreateUserForm = () => {
     setFormValues({ [name]: value });
   };
 
+  const closeErrorPopup = () => {
+    setError(null);
+  };
+
   return (
     <section className="bg-gray-50 ">
+      {error && <ErrorPopup message={error} onClose={closeErrorPopup} />}
       <div className=" items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
