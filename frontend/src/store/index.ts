@@ -11,10 +11,20 @@ interface ChatStore {
   setSocket: (socket: Socket) => void;
   getMessages: () => Message[];
   setMessages: (messages: any) => void;
+  setFormValues: (formValues: Partial<FormValues>) => void;
+}
+
+interface FormValues {
+  nick: string;
+  email: string;
+  password: string;
 }
 
 export const useStore = create<ChatStore>((set, get) => {
   return {
+    nick: "",
+    email: "",
+    password: "",
     messages: [],
     socket: null,
 
@@ -27,6 +37,9 @@ export const useStore = create<ChatStore>((set, get) => {
     setMessage: (message: Message) => {
       const currentMessages = get().messages;
       set({ messages: [...currentMessages, message] });
+    },
+    setFormValues: (formValues: Partial<FormValues>) => {
+      set((state) => ({ ...state, ...formValues }));
     },
   };
 });
