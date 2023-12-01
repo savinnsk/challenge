@@ -4,13 +4,13 @@ import { CreateUserService } from "@/services/user-service";
 import { Logo } from "../sidebar/logo";
 import { useStore } from "@/store";
 import { CreateUserFormData, createUserSchema } from "@/schemas/form-schemas";
-import { ZodError } from "zod";
+import { ZodError, set } from "zod";
 import ErrorPopup from "../errorPopUp/errorPopUp";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
-  const { error, setError } = useStore();
+  const { error, setError, setIsLogged } = useStore();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -28,6 +28,7 @@ export const CreateUserForm = () => {
 
       localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
+      setIsLogged(true);
 
       window.location.href = "/chat";
     } catch (error) {

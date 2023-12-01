@@ -9,6 +9,8 @@ interface Store {
   messages: Message[];
   socket: Socket | null;
   error: string | null;
+  isLogged: boolean;
+  setIsLogged: (isLogged: boolean) => void;
   setSocket: (socket: Socket) => void;
   getMessages: () => Message[];
   setMessages: (messages: any) => void;
@@ -32,7 +34,9 @@ export const useStore = create<Store>((set, get) => {
     error: null,
     messages: [],
     socket: null,
+    isLogged: false,
 
+    setIsLogged: (isLogged: boolean) => set({ isLogged }),
     setError: (error: string | null) => set({ error }),
     setSocket: (socket: Socket) => set({ socket }),
     getMessages: () => get().messages,
