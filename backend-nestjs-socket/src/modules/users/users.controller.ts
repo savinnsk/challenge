@@ -1,4 +1,4 @@
-import { Body, Controller, Res, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserCreateDto } from './dto';
 import {
@@ -20,12 +20,9 @@ export class UsersController {
     description: 'New user created successfully',
   })
   @ApiBadRequestResponse({ status: 400, description: 'User Already exist' })
-  async create(@Body() data: UserCreateDto, @Res() res) {
+  async create(@Body() data: UserCreateDto) {
     const response: any = await this.usersService.create(data);
 
-    if (response.status && response.message) {
-      res.status(response.status).send(response.message);
-    }
     return response;
   }
 }

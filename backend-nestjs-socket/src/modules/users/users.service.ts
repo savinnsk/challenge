@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserCreateDto } from './dto';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
+import { jwtHelper } from 'src/helpers/jwt-helper';
 
 @Injectable()
 export class UsersService {
@@ -18,8 +19,22 @@ export class UsersService {
         message: 'User Already exist',
       };
     }
-    const user = await this.prisma.user.create({ data });
+    const { id, email, nickname } = await this.prisma.user.create({ data });
 
-    return user;
+    const accessToken = await jwtHelper.encrypt({
+      sub: id,
+      email,
+      nickname,
+    });
+
+    return {
+      status: 200,
+      message: 'user created with success',
+      data: {
+        email,
+        nickname,
+        accessToken,
+      },
+    };
   }
 }
