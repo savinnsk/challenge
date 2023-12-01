@@ -3,6 +3,7 @@
 import { Logo } from "@/app/components/sidebar/logo";
 import { useStore } from "@/store";
 import ErrorPopup from "../components/errorPopUp/errorPopUp";
+import { LoginUserService } from "@/services/user-service";
 
 export default function Login() {
   const formData = useStore((state: any) => state);
@@ -13,11 +14,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const { name, nickname, email, password } = formData;
+      const { email, password } = formData;
 
-      const user: any = {}; //await LoginUserService(data);
-
-      if (user.response?.status == 409) {
+      const user: any = await LoginUserService({ email, password });
+      console.log(user);
+      if (user.response?.status == 401) {
         setError("Email ou senha incorretos!");
         return;
       }
@@ -27,8 +28,8 @@ export default function Login() {
         return;
       }
 
-      localStorage.setItem("userToken", user.accessToken);
-      localStorage.setItem("nickname", user.nickname);
+      localStorage.setItem("userToken", user.data.accessToken);
+      localStorage.setItem("nickname", user.data.nickname);
 
       window.location.href = "/chat";
     } catch (error) {

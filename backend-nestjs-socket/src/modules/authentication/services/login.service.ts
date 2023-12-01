@@ -4,7 +4,9 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class LoginService {
   constructor(private readonly jwtService: JwtService) {}
-  async execute({ user }: any): Promise<{ accessToken: string }> {
+  async execute({
+    user,
+  }: any): Promise<{ accessToken: string; nickname: string }> {
     const payload = {
       email: user.email,
       sub: user.id,
@@ -12,6 +14,7 @@ export class LoginService {
     };
     return {
       accessToken: this.jwtService.sign(payload),
+      nickname: user.nickname,
     };
   }
 }
