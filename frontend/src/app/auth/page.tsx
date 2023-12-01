@@ -1,9 +1,9 @@
 import { Logo } from "@/app/components/sidebar/logo";
 
-export default function Home() {
+export default function Login() {
   return (
-    <section className="bg-gray-500 rounded ">
-      <div className=" items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    <section className=" rounded ">
+      <div className=" items-center justify-center px-6 py-8  md:h-screen lg:py-0">
         <a
           href="#"
           className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
@@ -59,7 +59,7 @@ export default function Home() {
               <p className="text-sm font-light text-gray-500 ">
                 Ainda não tem uma conta?{" "}
                 <a
-                  href="#"
+                  href="/auth/sign-up"
                   className="font-medium text-primary-600 hover:underline "
                 >
                   Criar Conta

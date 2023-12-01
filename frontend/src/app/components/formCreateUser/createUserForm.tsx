@@ -60,7 +60,7 @@ export const CreateUserForm = () => {
   };
 
   return (
-    <section className="bg-gray-500 rounded ">
+    <section className=" rounded ">
       {error && <ErrorPopup message={error} onClose={closeErrorPopup} />}
       <div className=" items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
@@ -74,11 +74,7 @@ export const CreateUserForm = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Vamos lá! Criar sua conta!
             </h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              // onSubmit={handleSubmit}
-              // action="/#"
-            >
+            <form className="space-y-4 md:space-y-6">
               <div>
                 <label
                   htmlFor="text"

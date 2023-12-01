@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="items-center justify-center min-h-screen">
+        <div className="bg-gray-500 min-h-screen  flex items-center justify-center">
           <AuthProvider>
             <main className="lg:col-start-2 ">{children}</main>
           </AuthProvider>
