@@ -9,8 +9,8 @@ interface Store {
   messages: Message[];
   socket: Socket | null;
   error: string | null;
-  isLogged: boolean;
-  setIsLogged: (isLogged: boolean) => void;
+  currentRoom: string;
+  setCurrentRoom: (room: string) => void;
   setSocket: (socket: Socket) => void;
   getMessages: () => Message[];
   setMessages: (messages: any) => void;
@@ -35,8 +35,9 @@ export const useStore = create<Store>((set, get) => {
     messages: [],
     socket: null,
     isLogged: false,
+    currentRoom: "",
 
-    setIsLogged: (isLogged: boolean) => set({ isLogged }),
+    setCurrentRoom: (room: string) => set({ currentRoom: room }),
     setError: (error: string | null) => set({ error }),
     setSocket: (socket: Socket) => set({ socket }),
     getMessages: () => get().messages,

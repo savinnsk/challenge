@@ -2,9 +2,10 @@
 import { useStore } from "@/store";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { Send, ArrowBigLeft } from "lucide-react";
 
 export default function ChatMessage() {
-  const { setSocket, socket, setMessages } = useStore();
+  const { setSocket, socket, setMessages, currentRoom } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
   const nickname = localStorage.getItem("nickname");
@@ -39,13 +40,14 @@ export default function ChatMessage() {
 
   const handlerEnterAtRoom = () => {
     if (socket) {
-      socket.emit("getAllMessagesRoom", "default");
+      socket.emit("getAllMessagesRoom", currentRoom);
     }
   };
 
   const handlerSendMessage = () => {
     if (socket) {
       socket.emit("message", {
+        room: currentRoom,
         data: currentMessage,
         nickname: nickname,
         clientId: socket.id,
@@ -57,7 +59,15 @@ export default function ChatMessage() {
 
   return (
     <div className="bg-slate-50 dark:bg-slate-900 p-4 md:p-8 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col ">
-      <h1 className="font-bold  text-2xl mb-12 text-center">Chat: Geral</h1>
+      <h1 className="font-bold  text-2xl mb-12 text-center">
+        Chat :{" "}
+        <p className="font-semibold text-green-900">
+          {" "}
+          {currentRoom
+            ? currentRoom
+            : "Nenhuma sala selecionada clique ao lado"}
+        </p>
+      </h1>
       <div className="max-w-2xl w-full  h-full items-center justify-center m-auto">
         <div className="messages-container overflow-y-auto flex-grow mb-6 bg-slate-200 rounded">
           {chatMessages.map((msg: any, index: any) => (
@@ -79,9 +89,9 @@ export default function ChatMessage() {
 
           <button
             onClick={handlerSendMessage}
-            className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded font-medium"
+            className="bg-sky-800 hover:bg-sky-700 text-white px-4 py-2 rounded font-medium"
           >
-            Enviar
+            <Send />
           </button>
         </div>
       </div>
