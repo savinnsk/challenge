@@ -4,13 +4,13 @@ import { CreateUserService } from "@/services/user-service";
 import { Logo } from "../sidebar/logo";
 import { useStore } from "@/store";
 import { CreateUserFormData, createUserSchema } from "@/schemas/form-schemas";
-import { ZodError, set } from "zod";
+import { ZodError } from "zod";
 import ErrorPopup from "../errorPopUp/errorPopUp";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
-  const { error, setError, setIsLogged } = useStore();
+  const { error, setError } = useStore();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -26,17 +26,24 @@ export const CreateUserForm = () => {
       });
       const user = await CreateUserService({ name, nickname, email, password });
 
+      if (user.response?.status == 409) {
+        setError("Email já está em uso!");
+        return;
+      }
+
+      if (user.response?.status) {
+        setError("Estamos com problemas, tente novamente mais tarde!");
+        return;
+      }
+
       localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
-      setIsLogged(true);
 
       window.location.href = "/chat";
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.errors.map((err) => err.message).join("\n");
         setError(errorMessage);
-      } else {
-        console.error("Error creating user:", error);
       }
     }
   };
@@ -68,8 +75,8 @@ export const CreateUserForm = () => {
             </h1>
             <form
               className="space-y-4 md:space-y-6"
-              onSubmit={handleSubmit}
-              action="#"
+              // onSubmit={handleSubmit}
+              // action="/#"
             >
               <div>
                 <label
@@ -145,6 +152,7 @@ export const CreateUserForm = () => {
 
                 <button
                   type="submit"
+                  onClick={handleSubmit}
                   className="w-full text-white font-bold  bg-slate-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-sm px-5 py-2.5 text-center mt-6"
                 >
                   Criar
