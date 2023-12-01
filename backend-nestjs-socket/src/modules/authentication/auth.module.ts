@@ -7,6 +7,7 @@ import { LocalStrategy } from './strategies/local-strategy';
 import { JwtStrategy } from './strategies/jwt-strategy';
 import { ValidateUserService } from './services/validate.service';
 import { LoginService } from './services/login.service';
+import { PrismaService } from 'src/infra/database/prisma/prisma-service';
 
 @Module({
   imports: [
@@ -21,7 +22,14 @@ import { LoginService } from './services/login.service';
       }),
     }),
   ],
-  providers: [LocalStrategy, JwtStrategy, ValidateUserService, LoginService],
+  providers: [
+    LocalStrategy,
+    JwtStrategy,
+    ValidateUserService,
+    LoginService,
+    ConfigService,
+    PrismaService,
+  ],
   exports: [ValidateUserService, LoginService],
   controllers: [],
 })
