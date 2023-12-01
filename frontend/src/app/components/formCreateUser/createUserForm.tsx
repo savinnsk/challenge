@@ -1,12 +1,12 @@
 import { CreateUserService } from "@/services/user-service";
 import { Logo } from "../sidebar/logo";
 import { useStore } from "@/store";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -14,6 +14,9 @@ export const CreateUserForm = () => {
       const user = await CreateUserService(formData);
 
       console.log("User created successfully:", user);
+      localStorage.setItem("userToken", user.accessToken);
+      localStorage.setItem("nickname", user.nickname);
+      navigate("/chat");
     } catch (error) {
       console.error("Error creating user:", error);
     }
