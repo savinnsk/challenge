@@ -17,7 +17,13 @@ export class UsersService {
       },
     });
 
-    if (existUser) {
+    const nicknameExist = await this.prisma.user.findFirst({
+      where: {
+        nickname: data.nickname,
+      },
+    });
+
+    if (existUser || nicknameExist) {
       throw new ConflictException('User already exists');
     }
     const { id, email, nickname } = await this.prisma.user.create({ data });

@@ -27,7 +27,7 @@ export const CreateUserForm = () => {
       const user: any = await CreateUserService(data);
 
       if (user.response?.status == 409) {
-        setError("Email já está em uso!");
+        setError("Email ou Nickname já está em uso!");
         return;
       }
 
