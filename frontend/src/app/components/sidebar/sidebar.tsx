@@ -1,11 +1,13 @@
 "use client";
-import { useStore } from "@/store";
+
+import userContextStore from "@/hooks/context-store";
 import { Logo } from "./logo";
 import { RoomNavigation } from "./roomNavigation/room-navigation";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { Menu } from "lucide-react";
+
 export const SideBar = () => {
-  const { isLogged } = useStore();
+  const { logged } = userContextStore();
 
   return (
     <Collapsible.Root className="fixed  left-0 top-0 right-0 data-[state=open]:bottom-0  lg:data-[state=closed]:bottom-0 z-20 bg-slate-700 lg:right-auto lg:w-80 lg:border-r lg:px-5 lg:py-8 flex flex-col gap-6 border-b">
@@ -22,7 +24,7 @@ export const SideBar = () => {
         forceMount
         className="flex flex-col flex-1 gap-12 data-[state=closed]:hidden lg:data-[state=closed]:flex justify-between"
       >
-        {isLogged ? <RoomNavigation /> : null}
+        <RoomNavigation />
 
         <div className="mt-auto flex flex-col ">
           <div></div>
