@@ -1,8 +1,54 @@
+"use client";
+
 import { Logo } from "@/app/components/sidebar/logo";
+import { useStore } from "@/store";
+import ErrorPopup from "../components/errorPopUp/errorPopUp";
 
 export default function Login() {
+  const formData = useStore((state: any) => state);
+  const setFormValues = useStore((state) => state.setFormValues);
+  const { error, setError } = useStore();
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const { name, nickname, email, password } = formData;
+
+      const user: any = {}; //await LoginUserService(data);
+
+      if (user.response?.status == 409) {
+        setError("Email ou senha incorretos!");
+        return;
+      }
+
+      if (user.response?.status) {
+        setError("Estamos com problemas, tente novamente mais tarde!");
+        return;
+      }
+
+      localStorage.setItem("userToken", user.accessToken);
+      localStorage.setItem("nickname", user.nickname);
+
+      window.location.href = "/chat";
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setFormValues({ [name]: value });
+  };
+
+  const closeErrorPopup = () => {
+    setError(null);
+  };
+
   return (
     <section className=" rounded ">
+      {error && <ErrorPopup message={error} onClose={closeErrorPopup} />}
       <div className=" items-center justify-center px-6 py-8  md:h-screen lg:py-0">
         <a
           href="#"
@@ -27,6 +73,8 @@ export default function Login() {
                   type="email"
                   name="email"
                   id="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="seuemail@email.com"
                   required
@@ -43,6 +91,8 @@ export default function Login() {
                   type="password"
                   name="password"
                   id="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   required
@@ -50,6 +100,7 @@ export default function Login() {
 
                 <button
                   type="submit"
+                  onClick={handleSubmit}
                   className="w-full text-white font-bold  bg-slate-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-sm px-5 py-2.5 text-center mt-6"
                 >
                   Entrar

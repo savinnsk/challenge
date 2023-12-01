@@ -6,13 +6,12 @@ import { useStore } from "@/store";
 import { CreateUserFormData, createUserSchema } from "@/schemas/form-schemas";
 import { ZodError } from "zod";
 import ErrorPopup from "../errorPopUp/errorPopUp";
-import useContextStore from "@/hooks/context-store";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
   const { error, setError } = useStore();
-  const { toSetLogged } = useContextStore();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -39,7 +38,7 @@ export const CreateUserForm = () => {
 
       localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
-      toSetLogged(true);
+
       window.location.href = "/chat";
     } catch (error) {
       if (error instanceof ZodError) {
