@@ -12,10 +12,14 @@ export class RedisRepository {
     return result;
   }
 
-  async addMessageChat(room: string, clientId: string, message: string) {
+  async addMessageChat(
+    room: string,
+    clientId: string,
+    nickname: string,
+    message: string,
+  ) {
     try {
-      console.log(clientId, message);
-      const jsonMessage = JSON.stringify({ clientId, message });
+      const jsonMessage = JSON.stringify({ clientId, message, nickname });
       await this.redis.rpush(room, jsonMessage);
     } catch (e) {
       console.log(e);

@@ -17,9 +17,15 @@ export class ChatGateway {
   async handleMessage(@MessageBody() data: any): Promise<void> {
     console.log('room', data.room);
     data.room = 'default';
-    this.redisRepository.addMessageChat(data.room, data.clientId, data.data);
+    this.redisRepository.addMessageChat(
+      data.room,
+      data.clientId,
+      data.nickname,
+      data.data,
+    );
     // Broadcast the message to all connections in the room
     this.server.to(data.room).emit('message', {
+      nickname: data.nickname,
       clientId: data.clientId,
       message: data.data,
     });
@@ -36,9 +42,6 @@ export class ChatGateway {
   // }
   @SubscribeMessage('getAllMessagesRoom')
   async getAllMessagesRoom(@MessageBody() data: any): Promise<void> {
-    console.log('room2', data);
-    //room = 'default';
-
     const messages = await this.redisRepository.getMessagesByRoomChat(data);
 
     this.server.emit('getAllMessagesRoom', messages);

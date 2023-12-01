@@ -7,6 +7,11 @@ export default function ChatMessage() {
   const { setSocket, socket, setMessages } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
+  const nickname = localStorage.getItem("nickname");
+
+  if (!nickname) {
+    window.location.href = "/auth";
+  }
 
   useEffect(() => {
     const socketInit = io("ws://localhost:3001");
@@ -42,6 +47,7 @@ export default function ChatMessage() {
     if (socket) {
       socket.emit("message", {
         data: currentMessage,
+        nickname: nickname,
         clientId: socket.id,
       });
       handlerEnterAtRoom();
@@ -56,7 +62,7 @@ export default function ChatMessage() {
         <div className="messages-container overflow-y-auto flex-grow mb-6 bg-slate-200 rounded">
           {chatMessages.map((msg: any, index: any) => (
             <p key={index} className="mb-2">
-              <span className="font-bold">{msg.clientId}</span> : {msg.message}
+              <span className="font-bold">{msg.nickname}</span> : {msg.message}
             </p>
           ))}
         </div>
