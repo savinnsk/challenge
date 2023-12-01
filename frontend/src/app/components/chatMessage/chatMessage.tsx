@@ -2,12 +2,12 @@
 import { useStore } from "@/store";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { Send, ArrowBigLeft } from "lucide-react";
+import { Send } from "lucide-react";
 
 export default function ChatMessage() {
   const { setSocket, socket, setMessages, currentRoom } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState<any>([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const nickname = localStorage.getItem("nickname");
 
   if (!nickname) {
@@ -58,20 +58,21 @@ export default function ChatMessage() {
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 p-4 md:p-8 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col ">
-      <h1 className="font-bold  text-2xl mb-12 text-center">
+    <div className="bg-gray-100 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col">
+      <h1 className="font-bold text-2xl mb-12 text-center">
         Chat :{" "}
-        <p className="font-semibold text-green-900">
+        <span className="font-semibold text-green-700">
           {currentRoom
             ? currentRoom
             : "Nenhuma sala selecionada clique ao lado"}
-        </p>
+        </span>
       </h1>
-      <div className="max-w-2xl w-full  h-full items-center justify-center m-auto">
-        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-slate-200 rounded">
+      <div className="max-w-2xl w-full h-full items-center justify-center m-auto">
+        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4">
           {chatMessages.map((msg: any, index: any) => (
             <p key={index} className="mb-2">
-              <span className="font-bold">{msg.nickname}</span> : {msg.message}
+              <span className="font-bold text-blue-700">{msg.nickname}</span> :{" "}
+              {msg.message}
             </p>
           ))}
         </div>
@@ -83,12 +84,12 @@ export default function ChatMessage() {
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
             placeholder="Digite sua mensagem..."
-            className="flex-1 p-3 border border-slate-300 rounded mx-6"
+            className="flex-1 p-3 border border-gray-300 rounded mx-6 focus:outline-none focus:ring focus:border-blue-400"
           />
 
           <button
             onClick={handlerSendMessage}
-            className="bg-gray-500  hover:bg-gray-400 text-white px-4 py-2 rounded font-medium"
+            className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded font-medium"
           >
             <Send />
           </button>
