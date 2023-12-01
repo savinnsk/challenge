@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { UserCreateDto } from './dto';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
 import { jwtHelper } from 'src/helpers/jwt-helper';
@@ -17,6 +21,10 @@ export class UsersService {
       throw new ConflictException('User already exists');
     }
     const { id, email, nickname } = await this.prisma.user.create({ data });
+
+    if (!id) {
+      throw new InternalServerErrorException('Internal Error');
+    }
 
     const accessToken = await jwtHelper.encrypt({
       sub: id,

@@ -7,24 +7,28 @@ export abstract class UserCreateDto {
   @IsEmail()
   @ApiProperty({
     example: 'joao@gmail.com',
+    required: true,
   })
   email: string;
 
   @IsString({ message: 'O nome deve ser uma string' })
   @ApiProperty({
     example: 'João',
+    required: true,
   })
   name: string;
 
   @IsString({ message: 'O nome deve ser uma string' })
   @ApiProperty({
     example: 'João123',
+    required: true,
   })
   nickname: string;
 
   @IsString({ message: 'O nome deve ser uma string' })
   @ApiProperty({
     example: 'João',
+    required: true,
   })
   password: string;
 }
