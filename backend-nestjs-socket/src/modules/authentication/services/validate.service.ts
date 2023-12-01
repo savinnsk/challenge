@@ -6,11 +6,15 @@ export class ValidateUserService {
   constructor(private prisma: PrismaService) {}
 
   async execute({ email }: any) {
-    const user = await this.prisma.user.findFirst(email);
+    const existUser = await this.prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
 
-    if (user) {
-      user.password = undefined;
-      return user;
+    if (existUser) {
+      existUser.password = undefined;
+      return existUser;
     }
 
     return null;

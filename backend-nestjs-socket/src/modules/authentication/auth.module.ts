@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt-strategy';
 import { ValidateUserService } from './services/validate.service';
 import { LoginService } from './services/login.service';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { PrismaService } from 'src/infra/database/prisma/prisma-service';
     PrismaService,
   ],
   exports: [ValidateUserService, LoginService],
-  controllers: [],
+  controllers: [AuthController],
 })
 export class AuthModule {}

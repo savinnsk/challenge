@@ -28,3 +28,17 @@ export abstract class UserCreateDto {
   })
   password: string;
 }
+
+export abstract class LoginUserDto {
+  @IsString()
+  @ApiProperty({
+    example: 'maria@mail.com',
+  })
+  email: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'passswd123',
+  })
+  password: string;
+}
