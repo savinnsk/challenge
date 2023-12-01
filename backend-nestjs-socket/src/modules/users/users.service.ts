@@ -11,8 +11,12 @@ export class UsersService {
         email: data.email,
       },
     });
+
     if (existUser) {
-      throw new Error('User already exists');
+      return {
+        status: 400,
+        message: 'User Already exist',
+      };
     }
     const user = await this.prisma.user.create({ data });
 

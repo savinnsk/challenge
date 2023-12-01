@@ -10,7 +10,6 @@ async function bootstrap() {
     .setTitle('API PLAY FOR A CAUSE CHAT')
     .setDescription('A REAL CHAT TO PLAY FOR A CAUSE')
     .setVersion('1.0')
-    .addTag('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

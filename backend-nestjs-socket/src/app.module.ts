@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ChatGateway } from './chat-gateway';
 import { RedisService } from './config/redis';
 import { RedisRepository } from './infra/redis-repository';
@@ -15,7 +13,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ChatGateway, RedisRepository, RedisService],
+  controllers: [],
+  providers: [ChatGateway, RedisRepository, RedisService],
 })
 export class AppModule {}
