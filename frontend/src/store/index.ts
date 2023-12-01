@@ -15,14 +15,16 @@ interface ChatStore {
 }
 
 interface FormValues {
-  nick: string;
+  name: string;
+  nickname: string;
   email: string;
   password: string;
 }
 
 export const useStore = create<ChatStore>((set, get) => {
   return {
-    nick: "",
+    name: "",
+    nickname: "",
     email: "",
     password: "",
     messages: [],

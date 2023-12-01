@@ -1,22 +1,24 @@
+"use client";
+
 import { CreateUserService } from "@/services/user-service";
 import { Logo } from "../sidebar/logo";
 import { useStore } from "@/store";
-import { useNavigate } from "react-router-dom";
 
 export const CreateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
-  const navigate = useNavigate();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
-      const user = await CreateUserService(formData);
+      const { name, nickname, email, password } = formData;
+      const user = await CreateUserService({ name, nickname, email, password });
 
-      console.log("User created successfully:", user);
       localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
-      navigate("/chat");
+
+      window.location.href = "/chat";
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -52,13 +54,31 @@ export const CreateUserForm = () => {
                   htmlFor="text"
                   className="block mb-2 text-sm font-medium text-gray-900 "
                 >
+                  Nome
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
+                  placeholder="user"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="text"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
                   Apelido/Nickname
                 </label>
                 <input
                   type="text"
-                  name="nick"
-                  id="nick"
-                  value={formData.nick}
+                  name="nickname"
+                  id="nickname"
+                  value={formData.nickname}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="user1234"

@@ -9,9 +9,9 @@ interface UserCreateDto {
 
 export const CreateUserService = async (data: UserCreateDto) => {
   try {
-    const user = await axiosConfig.post(`users`, data, {});
+    const response = await axiosConfig.post(`users`, data, {});
 
-    return user.data;
+    return response.data.data;
   } catch (err) {
     return err;
   }
