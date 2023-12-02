@@ -25,4 +25,13 @@ export class RedisRepository {
       console.log(e);
     }
   }
+
+  async deleteMessagesByRoomChat(room: string) {
+    try {
+      await this.redis.del(room);
+      console.log(`Deleted messages for room: ${room}`);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 }

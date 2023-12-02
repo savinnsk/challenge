@@ -13,6 +13,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
+  ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -57,6 +58,7 @@ export class RoomsController {
 
   @ApiBearerAuth()
   @Delete(':id')
+  @ApiParam({ name: 'id', type: 'string' } as any)
   @ApiOperation({ summary: 'delete a room' })
   @ApiCreatedResponse({
     status: 201,
