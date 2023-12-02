@@ -32,12 +32,23 @@ export class RoomsService {
       const rooms = await this.prismaService.room.findMany();
 
       const roomsWithOwnership = rooms.map((room) => ({
+        id: room.id,
         name: room.name,
         welcomeMessage: room.welcomeMessage,
         owner: room.userId === user.sub,
       }));
 
       return roomsWithOwnership;
+    } catch (error) {
+      return new InternalServerErrorException();
+    }
+  }
+
+  async deleteRoom({ id, userToken }: { id: string; userToken: string }) {
+    try {
+      await jwtHelper.decrypt(userToken);
+
+      this.prismaService.room.delete({ where: { id } });
     } catch (error) {
       return new InternalServerErrorException();
     }

@@ -1,4 +1,12 @@
-import { Controller, Post, Request, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Request,
+  Body,
+  Get,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import {
   ApiBadRequestResponse,
@@ -43,6 +51,22 @@ export class RoomsController {
   async getAll(@Request() req: any) {
     const userToken = req.headers['authorization'].split(' ')[1];
     return await this.roomsService.listAllRooms({
+      userToken: userToken,
+    });
+  }
+
+  @ApiBearerAuth()
+  @Delete(':id')
+  @ApiOperation({ summary: 'delete a room' })
+  @ApiCreatedResponse({
+    status: 201,
+    description: 'room deleted room successfully',
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Not Authorized' })
+  async delete(@Request() req: any, @Param('id') id: string) {
+    const userToken = req.headers['authorization'].split(' ')[1];
+    return await this.roomsService.deleteRoom({
+      id,
       userToken: userToken,
     });
   }
