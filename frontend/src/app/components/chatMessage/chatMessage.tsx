@@ -33,6 +33,10 @@ export default function ChatMessage() {
         setChatMessages(messages);
       });
 
+      socket.on("getAllMessagesRoomByClient", (messages) => {
+        setChatMessages(messages);
+      });
+
       socket.on("disconnect", (userId) => {
         setSocket(null);
       });
