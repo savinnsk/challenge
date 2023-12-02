@@ -6,14 +6,13 @@ interface Message {
   clientId: string;
 }
 interface Store {
-  messages: Message[];
   socket: Socket | null;
   error: string | null;
   currentRoom: string;
+  currentUser: any;
+  setCurrentUser: (user: any) => void;
   setCurrentRoom: (room: string) => void;
-  setSocket: (socket: Socket) => void;
-  getMessages: () => Message[];
-  setMessages: (messages: any) => void;
+  setSocket: (socket: Socket | null) => void;
   setFormValues: (formValues: Partial<FormValues>) => void;
   setError: (error: string | null) => void;
 }
@@ -32,23 +31,15 @@ export const useStore = create<Store>((set, get) => {
     email: "",
     password: "",
     error: null,
-    messages: [],
     socket: null,
     isLogged: false,
     currentRoom: "",
+    currentUser: null, // Add a new property to track the current user
 
+    setCurrentUser: (user: any) => set({ currentUser: user }), // Set the current user
     setCurrentRoom: (room: string) => set({ currentRoom: room }),
     setError: (error: string | null) => set({ error }),
-    setSocket: (socket: Socket) => set({ socket }),
-    getMessages: () => get().messages,
-    setMessages: (messages: Message[]) => {
-      const currentMessages = get().messages;
-      set({ messages: [...currentMessages, ...messages] });
-    },
-    setMessage: (message: Message) => {
-      const currentMessages = get().messages;
-      set({ messages: [...currentMessages, message] });
-    },
+    setSocket: (socket: Socket | null) => set({ socket }),
     setFormValues: (formValues: Partial<FormValues>) => {
       set((state) => ({ ...state, ...formValues }));
     },
