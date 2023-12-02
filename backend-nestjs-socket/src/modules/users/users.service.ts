@@ -86,4 +86,46 @@ export class UsersService {
       return new InternalServerErrorException();
     }
   }
+
+  async getUser({ userToken }: { userToken: string }) {
+    try {
+      const userId: any = await jwtHelper.decrypt(userToken);
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userId.sub,
+        },
+      });
+
+      return {
+        name: user.name,
+        photo: user.photoUrl,
+        email: user.email,
+        nickname: user.name,
+      };
+    } catch (error) {
+      console.log(error);
+      return new InternalServerErrorException();
+    }
+  }
+
+  async deleteUser({ userToken }: { userToken: string }) {
+    try {
+      const userId: any = await jwtHelper.decrypt(userToken);
+
+      const user = await this.prisma.user.delete({
+        where: {
+          id: userId.sub,
+        },
+      });
+
+      return {
+        message: 'user deleted success',
+        nickname: user.name,
+      };
+    } catch (error) {
+      console.log(error);
+      return new InternalServerErrorException();
+    }
+  }
 }
