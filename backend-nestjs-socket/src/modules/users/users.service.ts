@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserCreateDto, UserUpdateDto } from './dto';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
@@ -57,11 +58,22 @@ export class UsersService {
     userToken: string;
   }) {
     try {
-      const userId = await jwtHelper.decrypt(userToken);
+      const userId: any = await jwtHelper.decrypt(userToken);
+
+      const existingUser = await this.prisma.user.findUnique({
+        where: {
+          id: userId.sub,
+        },
+      });
+
+      if (!existingUser) {
+        throw new UnauthorizedException('User not found');
+      }
+
       const user = await this.prisma.user.update({
         data,
         where: {
-          id: userId,
+          id: existingUser.id,
         },
       });
 
@@ -70,6 +82,7 @@ export class UsersService {
         nickname: user.name,
       };
     } catch (error) {
+      console.log(error);
       return new InternalServerErrorException();
     }
   }

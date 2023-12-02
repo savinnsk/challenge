@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { UserCreateDto, UserUpdateDto } from './dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
@@ -30,6 +31,7 @@ export class UsersController {
     }
   }
 
+  @ApiBearerAuth()
   @Put()
   @ApiOperation({ summary: 'update user' })
   @ApiCreatedResponse({
