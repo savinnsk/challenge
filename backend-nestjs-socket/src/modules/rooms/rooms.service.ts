@@ -2,10 +2,14 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
 import { CreateRoomDto } from './dto';
 import { jwtHelper } from 'src/helpers/jwt-helper';
+import { RedisRepository } from 'src/infra/redis-repository';
 
 @Injectable()
 export class RoomsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private readonly redisRepository: RedisRepository,
+  ) {}
 
   async create({
     data,
@@ -49,7 +53,7 @@ export class RoomsService {
       await jwtHelper.decrypt(userToken);
 
       const room = await this.prismaService.room.findUnique({ where: { id } });
-
+      await this.redisRepository.deleteMessagesByRoomChat(room.name);
       return this.prismaService.room.delete({ where: { id: room.id } });
     } catch (error) {
       return new InternalServerErrorException();
