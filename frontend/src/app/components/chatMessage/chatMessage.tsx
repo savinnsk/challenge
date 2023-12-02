@@ -116,7 +116,7 @@ export default function ChatMessage() {
 
           <button
             onClick={handlerSendMessage}
-            className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded font-medium"
+            className="bg-slate-500  hover:bg-blue-400 text-white px-4 py-2 rounded font-medium"
           >
             <Send />
           </button>
