@@ -48,7 +48,9 @@ export class RoomsService {
     try {
       await jwtHelper.decrypt(userToken);
 
-      this.prismaService.room.delete({ where: { id } });
+      const room = await this.prismaService.room.findUnique({ where: { id } });
+
+      return this.prismaService.room.delete({ where: { id: room.id } });
     } catch (error) {
       return new InternalServerErrorException();
     }
