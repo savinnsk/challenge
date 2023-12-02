@@ -24,4 +24,22 @@ export class RoomsService {
       return new InternalServerErrorException();
     }
   }
+
+  async listAllRooms({ userToken }: { userToken: string }) {
+    try {
+      const user: any = await jwtHelper.decrypt(userToken);
+
+      const rooms = await this.prismaService.room.findMany();
+
+      const roomsWithOwnership = rooms.map((room) => ({
+        name: room.name,
+        welcomeMessage: room.welcomeMessage,
+        owner: room.userId === user.sub,
+      }));
+
+      return roomsWithOwnership;
+    } catch (error) {
+      return new InternalServerErrorException();
+    }
+  }
 }

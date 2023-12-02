@@ -1,4 +1,4 @@
-import { Controller, Post, Request, Body } from '@nestjs/common';
+import { Controller, Post, Request, Body, Get } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import {
   ApiBadRequestResponse,
@@ -29,6 +29,21 @@ export class RoomsController {
     return await this.roomsService.create({
       userToken: userToken,
       data: createRoomDto,
+    });
+  }
+
+  @ApiBearerAuth()
+  @Get()
+  @ApiOperation({ summary: 'get all rooms' })
+  @ApiCreatedResponse({
+    status: 201,
+    description: 'get all room successfully',
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Not Authorized' })
+  async getAll(@Request() req: any) {
+    const userToken = req.headers['authorization'].split(' ')[1];
+    return await this.roomsService.listAllRooms({
+      userToken: userToken,
     });
   }
 }
