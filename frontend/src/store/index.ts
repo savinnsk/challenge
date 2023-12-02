@@ -1,16 +1,20 @@
+import { axiosConfig } from "@/config/axios.config";
 import { Socket } from "socket.io-client";
 import { create } from "zustand";
 
 interface Store {
   socket: Socket | null;
+  setSocket: (socket: Socket | null) => void;
   error: string | null;
+  setError: (error: string | null) => void;
   currentRoom: string;
+  setCurrentRoom: (room: string) => void;
   currentUser: any;
   setCurrentUser: (user: any) => void;
-  setCurrentRoom: (room: string) => void;
-  setSocket: (socket: Socket | null) => void;
+  rooms: [];
+  fetchRooms: (userToken: string | null) => void;
   setFormValues: (formValues: Partial<FormValues>) => void;
-  setError: (error: string | null) => void;
+  verifyUserSession: (token: string | null) => boolean | any;
 }
 
 interface FormValues {
@@ -30,7 +34,8 @@ export const useStore = create<Store>((set, get) => {
     socket: null,
     isLogged: false,
     currentRoom: "",
-    currentUser: null, // Add a new property to track the current user
+    currentUser: null,
+    rooms: [],
 
     setCurrentUser: (user: any) => set({ currentUser: user }), // Set the current user
     setCurrentRoom: (room: string) => set({ currentRoom: room }),
@@ -38,6 +43,34 @@ export const useStore = create<Store>((set, get) => {
     setSocket: (socket: Socket | null) => set({ socket }),
     setFormValues: (formValues: Partial<FormValues>) => {
       set((state) => ({ ...state, ...formValues }));
+    },
+    fetchRooms: async (userToken: string | null) => {
+      try {
+        const response = await axiosConfig.get("/rooms", {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+
+        set({ rooms: response.data });
+      } catch (error) {
+        console.error("Error fetching rooms:", error);
+        return error;
+      }
+    },
+    verifyUserSession: async (userToken: string | null) => {
+      try {
+        const user = await axiosConfig.get("/users", {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        });
+
+        return user;
+      } catch (error) {
+        console.error("Error to get user session:", error);
+        return error;
+      }
     },
   };
 });

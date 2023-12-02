@@ -17,7 +17,7 @@ export default function Login() {
       const { email, password } = formData;
 
       const user: any = await LoginUserService({ email, password });
-      console.log(user);
+
       if (user.response?.status == 401) {
         setError("Email ou senha incorretos!");
         return;
