@@ -17,6 +17,7 @@ import {
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LoginService } from './services/login.service';
 import { LoginUserDto } from '../users/dto';
+import { AuthRequest } from 'src/domain/request-dto';
 
 @ApiTags('auth')
 @Controller('login')
@@ -46,7 +47,7 @@ export class AuthController {
     type: LoginUserDto,
   })
   @Post()
-  async login(@Request() req) {
+  async login(@Request() req: AuthRequest) {
     return await this.loginService.execute({ user: req.user });
   }
 }

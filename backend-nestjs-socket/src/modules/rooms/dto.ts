@@ -4,6 +4,8 @@ import { IsString } from 'class-validator';
 export abstract class CreateRoomDto {
   id?: string;
 
+  userId: string;
+
   @IsString({ message: 'the name should be a string' })
   @ApiProperty({
     example: 'Copa do mundo',

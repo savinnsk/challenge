@@ -8,6 +8,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API PLAY FOR A CAUSE CHAT')
+    .addBearerAuth()
     .setDescription('A REAL CHAT TO PLAY FOR A CAUSE')
     .setVersion('1.0')
     .build();

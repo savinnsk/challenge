@@ -17,7 +17,7 @@ model User {
     password String
     email String
     photoUrl String?
-    rooms        Room[]
+  
 
     @@map("users")
 }
@@ -26,8 +26,8 @@ model Room {
     id String @id @default(uuid())
     name String
     userId String
-    welcomeMessage String
-    user            User @relation(fields: [userId], references: [id])
+    welcomeMessage String?
+  
     
     @@map("rooms")
 }
