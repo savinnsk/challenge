@@ -46,3 +46,35 @@ export abstract class LoginUserDto {
   })
   password: string;
 }
+
+export abstract class UserUpdateDto {
+  @IsEmail()
+  @ApiProperty({
+    example: 'joao@gmail.com',
+  })
+  email?: string;
+
+  @IsString({ message: 'name should be a string' })
+  @ApiProperty({
+    example: 'João',
+  })
+  name?: string;
+
+  @IsString({ message: 'name should be a string' })
+  @ApiProperty({
+    example: 'João123',
+  })
+  nickname?: string;
+
+  @IsString({ message: 'name should be a string' })
+  @ApiProperty({
+    example: 'João',
+  })
+  password?: string;
+
+  @IsString({ message: 'name should be a string' })
+  @ApiProperty({
+    example: 'https://photo.url.com',
+  })
+  photoUrl?: string;
+}

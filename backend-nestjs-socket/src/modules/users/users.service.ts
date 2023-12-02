@@ -3,7 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { UserCreateDto } from './dto';
+import { UserCreateDto, UserUpdateDto } from './dto';
 import { PrismaService } from 'src/infra/database/prisma/prisma-service';
 import { jwtHelper } from 'src/helpers/jwt-helper';
 
@@ -47,5 +47,30 @@ export class UsersService {
         accessToken,
       },
     };
+  }
+
+  async update({
+    data,
+    userToken,
+  }: {
+    data: UserUpdateDto;
+    userToken: string;
+  }) {
+    try {
+      const userId = await jwtHelper.decrypt(userToken);
+      const user = await this.prisma.user.update({
+        data,
+        where: {
+          id: userId,
+        },
+      });
+
+      return {
+        message: 'user updated success',
+        nickname: user.name,
+      };
+    } catch (error) {
+      return new InternalServerErrorException();
+    }
   }
 }

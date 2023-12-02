@@ -1,11 +1,12 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Put, Req, Res } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserCreateDto } from './dto';
+import { UserCreateDto, UserUpdateDto } from './dto';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiTags('users')
@@ -27,5 +28,17 @@ export class UsersController {
     } catch (e) {
       return res.status(e.status).json(e.response);
     }
+  }
+
+  @Put()
+  @ApiOperation({ summary: 'update user' })
+  @ApiCreatedResponse({
+    status: 201,
+    description: 'user updated successfully',
+  })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Not Authorized' })
+  async update(@Body() data: UserUpdateDto, @Req() req) {
+    const userToken = req.headers['authorization'].split(' ')[1];
+    return await this.usersService.update({ data, userToken });
   }
 }
