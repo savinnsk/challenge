@@ -7,6 +7,8 @@ import { UsersModule } from './modules/users/users.module';
 import authEnv from './config/auth.env';
 import { AuthModule } from './modules/authentication/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { RoomsModule } from './modules/rooms/rooms.module';
+import { RoomsModule } from './modules/rooms/rooms.module';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UsersModule,
     AuthModule,
+    RoomsModule,
   ],
   controllers: [],
   providers: [ChatGateway, RedisRepository, RedisService],
