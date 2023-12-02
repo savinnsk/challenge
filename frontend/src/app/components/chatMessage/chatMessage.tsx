@@ -5,9 +5,10 @@ import { io } from "socket.io-client";
 import { Send } from "lucide-react";
 
 export default function ChatMessage() {
-  const { setSocket, socket, setMessages, currentRoom } = useStore();
+  const { setSocket, socket, currentRoom } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState<any>([]);
+
   const nickname = localStorage.getItem("nickname");
 
   if (!nickname) {
@@ -26,12 +27,21 @@ export default function ChatMessage() {
   useEffect(() => {
     if (socket) {
       socket.on("message", (message) => {
-        setMessages((prevMessages: any) => [...prevMessages, message]);
+        setChatMessages((prevMessages: any) => [...prevMessages, message]);
       });
       socket.on("getAllMessagesRoom", (messages) => {
         setChatMessages(messages);
       });
+
+      socket.on("disconnect", (userId) => {
+        setSocket(null);
+      });
     }
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -56,7 +66,11 @@ export default function ChatMessage() {
       setCurrentMessage("");
     }
   };
-
+  const handleKeyPress = (e: any) => {
+    if (e.key === "Enter") {
+      handlerSendMessage();
+    }
+  };
   return (
     <div className="bg-gray-100 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col">
       <h1 className="font-bold text-2xl mb-12 text-center">
@@ -70,7 +84,15 @@ export default function ChatMessage() {
       <div className="max-w-2xl w-full h-full items-center justify-center m-auto">
         <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4">
           {chatMessages.map((msg: any, index: any) => (
-            <p key={index} className="mb-2">
+            <p key={index} className="mb-2 flex">
+              <img
+                src={
+                  msg.profilePhotoUrl ||
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGdAOWdZSbW8kVEqzA2noZPKVaMCZZZZ2tpA&usqp=CAU"
+                }
+                alt="Profile"
+                className="w-8 h-8 rounded-full mr-2"
+              />
               <span className="font-bold text-blue-700">{msg.nickname}</span> :{" "}
               {msg.message}
             </p>
@@ -82,6 +104,7 @@ export default function ChatMessage() {
             type="text"
             name="message"
             value={currentMessage}
+            onKeyUp={handleKeyPress}
             onChange={(e) => setCurrentMessage(e.target.value)}
             placeholder="Digite sua mensagem..."
             className="flex-1 p-3 border border-gray-300 rounded mx-6 focus:outline-none focus:ring focus:border-blue-400"

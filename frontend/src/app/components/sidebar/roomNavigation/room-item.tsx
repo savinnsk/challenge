@@ -12,7 +12,7 @@ export function RoomItem({ title }: RooItemProps) {
   const handlerEnterAtRoom = () => {
     setCurrentRoom(title);
     if (socket) {
-      socket.emit("getAllMessagesRoom", title);
+      socket.emit("getAllMessagesRoomByClient", title);
     }
   };
 
