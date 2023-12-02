@@ -51,7 +51,6 @@ export const useStore = create<Store>((set, get) => {
             Authorization: `Bearer ${userToken}`,
           },
         });
-
         set({ rooms: response.data });
       } catch (error) {
         console.error("Error fetching rooms:", error);
