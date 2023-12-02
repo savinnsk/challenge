@@ -1,6 +1,5 @@
 "use client";
 
-import userContextStore from "@/hooks/context-store";
 import { Logo } from "./logo";
 import { RoomNavigation } from "./roomNavigation/room-navigation";
 import * as Collapsible from "@radix-ui/react-collapsible";

@@ -1,10 +1,6 @@
 import { Socket } from "socket.io-client";
 import { create } from "zustand";
 
-interface Message {
-  message: string;
-  clientId: string;
-}
 interface Store {
   socket: Socket | null;
   error: string | null;
