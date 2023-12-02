@@ -3,8 +3,10 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { RedisRepository } from './infra/redis-repository';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
@@ -28,6 +30,16 @@ export class ChatGateway {
       clientId: data.clientId,
       message: data.data,
     });
+  }
+
+  @SubscribeMessage('getAllMessagesRoomByClient')
+  async getAllMessagesRoomByClient(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const messages = await this.redisRepository.getMessagesByRoomChat(data);
+
+    client.emit('getAllMessagesRoomByClient', messages);
   }
 
   @SubscribeMessage('getAllMessagesRoom')
