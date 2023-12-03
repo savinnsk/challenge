@@ -1,0 +1,31 @@
+version: "3"
+services:
+  redis-backend:
+    container_name: redis-backend
+    image: "redis:5.0.4-stretch"
+    stop_grace_period: "${DOCKER_STOP_GRACE_PERIOD:-3s}"
+    ports:
+      - "6379:6379"
+    command: ["--notify-keyspace-events", "AKE"]
+
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
