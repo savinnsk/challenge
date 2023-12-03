@@ -36,10 +36,11 @@ export const SideBar = () => {
         <RoomNavigation />
 
         <div className="mb-8 flex flex-col gap-2 font-bold">
-          <button className="bg-slate-600 hover:bg-slate-500 text-white  rounded px-3 py-2 flex justify-between ">
-            Editar Perfil <Pencil />
-          </button>
-
+          <a href="auth/update">
+            <button className="bg-slate-600 hover:bg-slate-500 text-white  rounded px-3 py-2 flex justify-between ">
+              Editar Perfil <Pencil />
+            </button>
+          </a>
           <button
             onClick={openCreateChatModal}
             className="bg-slate-600 hover:bg-slate-500 text-white rounded px-3 py-2 flex justify-between"

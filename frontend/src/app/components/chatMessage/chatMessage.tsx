@@ -4,16 +4,33 @@ import { useStore } from "@/store";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Send } from "lucide-react";
+import { FindOneUser } from "@/services/user-service";
 
 export default function ChatMessage() {
-  const { setSocket, socket, currentRoom, setCurrentRoom } = useStore();
+  const { setSocket, socket, currentRoom, setCurrentRoom, verifyUserSession } =
+    useStore();
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
-  const nickname = localStorage.getItem("nickname");
-
-  if (!nickname) {
+  const [user, setUser] = useState<any>(null);
+  const userToken = localStorage.getItem("userToken");
+  if (!userToken) {
     window.location.href = "/auth";
   }
+
+  useEffect(() => {
+    const session: any = verifyUserSession(userToken);
+
+    session.then((res: any) => {
+      if (!res.data.name) {
+        window.location.href = "/auth";
+      }
+    });
+    const user = FindOneUser({ userToken });
+
+    user.then((values) => {
+      setUser(values);
+    });
+  }, []);
 
   useEffect(() => {
     const socketInit = io("ws://localhost:3002");
@@ -64,7 +81,7 @@ export default function ChatMessage() {
       socket.emit("message", {
         room: currentRoom,
         data: currentMessage,
-        nickname: nickname,
+        nickname: user.nickname,
         clientId: socket.id,
       });
       handlerEnterAtRoom();
@@ -76,9 +93,10 @@ export default function ChatMessage() {
       handlerSendMessage();
     }
   };
+
   return (
     <div className="bg-gray-300 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col justify-between">
-      <h1 className="font-bold text-2xl mb-12 text-center mt-4">
+      <h1 className="font-bold text-2xl mb-12 text-center mt-12 lg:mt-4">
         Chat :{" "}
         <span className="font-semibold text-slate-700">
           {currentRoom
@@ -92,7 +110,7 @@ export default function ChatMessage() {
             <p key={index} className="mb-2 flex">
               <img
                 src={
-                  msg.profilePhotoUrl ||
+                  user.photo ||
                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGdAOWdZSbW8kVEqzA2noZPKVaMCZZZZ2tpA&usqp=CAU"
                 }
                 alt="Profile"

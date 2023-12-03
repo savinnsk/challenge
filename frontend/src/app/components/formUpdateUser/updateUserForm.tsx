@@ -12,7 +12,6 @@ export const UpdateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
   const { error, setError, verifyUserSession } = useStore();
-  const [user, setUser] = useState<any>(null);
   const userToken = localStorage.getItem("userToken");
 
   useEffect(() => {
@@ -26,7 +25,10 @@ export const UpdateUserForm = () => {
     const user = FindOneUser({ userToken });
 
     user.then((user) => {
-      setUser(user);
+      Object.keys(user).forEach((field) => {
+        console.log(field);
+        setFormValues({ [field]: user[field] });
+      });
     });
   }, []);
 
@@ -56,10 +58,9 @@ export const UpdateUserForm = () => {
         return;
       }
 
-      localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
 
-      //   window.location.href = "/chat";
+      window.location.href = "/chat";
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.errors.map((err) => err.message).join("\n");
@@ -105,7 +106,7 @@ export const UpdateUserForm = () => {
                   type="text"
                   name="name"
                   id="name"
-                  value={user?.name}
+                  value={formData.name}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="user"
@@ -123,7 +124,7 @@ export const UpdateUserForm = () => {
                   type="text"
                   name="nickname"
                   id="nickname"
-                  value={user?.nickname}
+                  value={formData.nickname}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="user1234"
@@ -140,7 +141,7 @@ export const UpdateUserForm = () => {
                   type="email"
                   name="email"
                   id="email"
-                  value={user?.email}
+                  value={formData.email}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="seuemail@email.com"
@@ -158,7 +159,7 @@ export const UpdateUserForm = () => {
                   type="text"
                   name="photoUrl"
                   id="photoUrl"
-                  value={user?.photoUrl}
+                  value={formData.photo}
                   onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                   placeholder="http://photo.com"
@@ -185,7 +186,7 @@ export const UpdateUserForm = () => {
                   onClick={handleSubmit}
                   className="w-full text-white font-bold  bg-slate-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-sm px-5 py-2.5 text-center mt-6"
                 >
-                  Criar
+                  Editar
                 </button>
               </div>
             </form>
