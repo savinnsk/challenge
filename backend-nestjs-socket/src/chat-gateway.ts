@@ -32,6 +32,20 @@ export class ChatGateway {
     });
   }
 
+  @SubscribeMessage('changeRoom')
+  async handleChangeRoom(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    client.join(data);
+    const messages = await this.redisRepository.getMessagesByRoomChat(data);
+    const data2 = {
+      room: data,
+      messages: messages,
+    };
+    client.emit('changeRoom', data2);
+  }
+
   @SubscribeMessage('getAllMessagesRoomByClient')
   async getAllMessagesRoomByClient(
     @MessageBody() data: any,
@@ -39,13 +53,21 @@ export class ChatGateway {
   ): Promise<void> {
     const messages = await this.redisRepository.getMessagesByRoomChat(data);
 
-    client.emit('getAllMessagesRoomByClient', messages);
+    client.to(data).emit('getAllMessagesRoomByClient', messages);
   }
 
   @SubscribeMessage('getAllMessagesRoom')
   async getAllMessagesRoom(@MessageBody() data: any): Promise<void> {
     const messages = await this.redisRepository.getMessagesByRoomChat(data);
+    this.server.to(data).emit('getAllMessagesRoom', messages);
+  }
 
-    this.server.emit('getAllMessagesRoom', messages);
+  @SubscribeMessage('leaveRoom')
+  async leaveRoom(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    client.leave(data);
+    client.emit('leftRoom', data);
   }
 }

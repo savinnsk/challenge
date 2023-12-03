@@ -19,3 +19,26 @@ export const deleteRoomService = async ({
     return err;
   }
 };
+
+export const createRoomService = async (data: {
+  name: string;
+  userToken: string | null;
+  welcomeMessage?: string;
+}) => {
+  try {
+    const { name, welcomeMessage } = data;
+    const response = await axiosConfig.post(
+      `rooms/`,
+      { name, welcomeMessage },
+      {
+        headers: {
+          Authorization: `Bearer ${data.userToken}`,
+        },
+      }
+    );
+
+    return response;
+  } catch (err) {
+    return err;
+  }
+};

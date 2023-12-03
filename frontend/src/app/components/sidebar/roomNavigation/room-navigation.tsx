@@ -9,13 +9,29 @@ export function RoomNavigation() {
   const { rooms, fetchRooms, verifyUserSession } = useStore();
 
   let userToken = localStorage.getItem("userToken");
-  const { socket, setCurrentRoom } = useStore();
+  const { socket, setCurrentRoom, currentRoom } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handlerEnterAtRoom = (room: string) => {
-    setCurrentRoom(room);
+  useEffect(() => {
     if (socket) {
-      socket.emit("getAllMessagesRoomByClient", room);
+      socket.on("changeRoom", (newRoom) => {
+        setCurrentRoom(newRoom);
+      });
+      socket.on("leaveRoom", () => {
+        setCurrentRoom("");
+      });
+      return () => {
+        if (socket) {
+          socket.off("changeRoom");
+        }
+      };
+    }
+  }, [socket]);
+
+  const handleRoomChange = (newRoom: string) => {
+    if (socket) {
+      if (currentRoom) socket.emit("leaveRoom", currentRoom);
+      socket.emit("changeRoom", newRoom);
     }
   };
 
@@ -52,7 +68,7 @@ export function RoomNavigation() {
       {rooms.map((room: any) => (
         <p className="flex" key={room.id}>
           <button
-            onClick={() => handlerEnterAtRoom(room.name)}
+            onClick={() => handleRoomChange(room.name)}
             className="flex bg-slate-600 hover:bg-slate-500  items-center gap-3 rounded px-3 py-2 "
           >
             <MessageSquare className="text-white" />
@@ -61,7 +77,7 @@ export function RoomNavigation() {
           {room.owner && (
             <button
               onClick={handleDeleteRoom}
-              className="text-white bg-red-400 rounded hover:bg-red-300  p-4"
+              className="text-white bg-red-400 rounded hover:bg-red-300  p-2"
             >
               <Trash2 />
             </button>

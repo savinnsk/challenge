@@ -16,7 +16,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-900 bg-opacity-500">
       <div className="bg-white p-4 rounded-md font-bold text-slate-600">
         <p>{message}</p>
         <div className="flex justify-end mt-4 ">

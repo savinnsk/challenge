@@ -6,10 +6,9 @@ import { io } from "socket.io-client";
 import { Send } from "lucide-react";
 
 export default function ChatMessage() {
-  const { setSocket, socket, currentRoom } = useStore();
+  const { setSocket, socket, currentRoom, setCurrentRoom } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
-
   const nickname = localStorage.getItem("nickname");
 
   if (!nickname) {
@@ -17,7 +16,7 @@ export default function ChatMessage() {
   }
 
   useEffect(() => {
-    const socketInit = io("ws://localhost:3001");
+    const socketInit = io("ws://localhost:3002");
     setSocket(socketInit);
 
     return () => {
@@ -38,8 +37,9 @@ export default function ChatMessage() {
         setChatMessages(messages);
       });
 
-      socket.on("disconnect", (userId) => {
-        setSocket(null);
+      socket.on("changeRoom", (data) => {
+        setChatMessages(data.messages);
+        setCurrentRoom(data.room);
       });
     }
     return () => {

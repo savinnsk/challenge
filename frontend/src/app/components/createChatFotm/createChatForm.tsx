@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Logo } from "../sidebar/logo";
+import { createRoomService } from "@/services/room-service";
 
 interface CreateChatFromProps {
   onClose: () => void;
@@ -10,10 +11,18 @@ interface CreateChatFromProps {
 export const CreateChatForm = ({ onClose }: CreateChatFromProps) => {
   const [name, setName] = useState("");
   const [welcomeMessage, setWelcomeMessage] = useState("");
-  function handleSubmit() {}
+
+  const userToken = localStorage.getItem("userToken");
+  async function handleSubmit() {
+    const response = await createRoomService({
+      name,
+      welcomeMessage,
+      userToken,
+    });
+  }
 
   return (
-    <section className=" rounded bg-gray-900 fixed inset-0 flex items-center justify-center bg-opacity-60 ">
+    <section className=" rounded bg-neutral-950 fixed inset-0 flex items-center justify-center bg-opacity-60 ">
       <div className=" items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
