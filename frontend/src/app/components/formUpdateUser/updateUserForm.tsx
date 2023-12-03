@@ -12,24 +12,30 @@ export const UpdateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
   const { error, setError, verifyUserSession } = useStore();
-  const userToken = localStorage.getItem("userToken");
-
+  const [userToken, setUserToken] = useState<any>("");
   useEffect(() => {
-    const session = verifyUserSession(userToken);
-
-    session.then((res: any) => {
-      if (!res.data.name) {
-        window.location.href = "/auth";
-      }
-    });
-    const user = FindOneUser({ userToken });
-
-    user.then((user) => {
-      Object.keys(user).forEach((field) => {
-        console.log(field);
-        setFormValues({ [field]: user[field] });
+    const token = localStorage.getItem("userToken");
+    setUserToken(token);
+  });
+  useEffect(() => {
+    if (userToken) {
+      const session = verifyUserSession(userToken);
+      session.then((res: any) => {
+        if (!res.data.name) {
+          window.location.href = "/auth";
+        }
       });
-    });
+      const user = FindOneUser({ userToken });
+
+      user.then((user) => {
+        Object.keys(user).forEach((field) => {
+          console.log(field);
+          setFormValues({ [field]: user[field] });
+        });
+      });
+    } else {
+      window.location.href = "/auth";
+    }
   }, []);
 
   const handleSubmit = async (e: any) => {
@@ -60,7 +66,9 @@ export const UpdateUserForm = () => {
 
       localStorage.setItem("nickname", user.nickname);
 
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.errors.map((err) => err.message).join("\n");

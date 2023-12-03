@@ -30,7 +30,9 @@ export default function Login() {
       localStorage.setItem("userToken", user.data.accessToken);
       localStorage.setItem("nickname", user.data.nickname);
 
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     } catch (error) {
       console.log(error);
     }

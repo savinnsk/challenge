@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "../sidebar/logo";
 import { createRoomService } from "@/services/room-service";
 
@@ -11,8 +11,12 @@ interface CreateChatFromProps {
 export const CreateChatForm = ({ onClose }: CreateChatFromProps) => {
   const [name, setName] = useState("");
   const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [userToken, setUserToken] = useState<any>("");
 
-  const userToken = localStorage.getItem("userToken");
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    setUserToken(token);
+  });
   async function handleSubmit() {
     const response = await createRoomService({
       name,

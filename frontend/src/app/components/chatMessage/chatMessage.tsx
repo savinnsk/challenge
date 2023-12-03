@@ -12,11 +12,16 @@ export default function ChatMessage() {
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
   const [user, setUser] = useState<any>(null);
-  const userToken = localStorage.getItem("userToken");
-  if (!userToken) {
-    window.location.href = "/auth";
-  }
+  const [userToken, setUserToken] = useState<any>("");
 
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    setUserToken(token);
+  });
+
+  if (typeof window !== "undefined") {
+    window.location.href = "/chat";
+  }
   useEffect(() => {
     const session: any = verifyUserSession(userToken);
 

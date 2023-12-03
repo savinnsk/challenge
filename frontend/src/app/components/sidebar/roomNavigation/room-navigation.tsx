@@ -8,10 +8,14 @@ import { deleteRoomService } from "@/services/room-service";
 export function RoomNavigation() {
   const { rooms, fetchRooms, verifyUserSession } = useStore();
 
-  let userToken = localStorage.getItem("userToken");
   const { socket, setCurrentRoom, currentRoom } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToken, setUserToken] = useState<any>("");
 
+  useEffect(() => {
+    const token = localStorage.getItem("userToken");
+    setUserToken(token);
+  });
   useEffect(() => {
     if (socket) {
       socket.on("changeRoom", (newRoom) => {
@@ -40,7 +44,9 @@ export function RoomNavigation() {
 
     if (response.status == 200) {
       fetchRooms(userToken);
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     }
     setIsModalOpen(false);
   };
