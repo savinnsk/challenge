@@ -76,17 +76,15 @@ export default function ChatMessage() {
     }
   };
   return (
-    <div className="bg-gray-100 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col">
-      <h1 className="font-bold text-2xl mb-12 text-center">
+    <div className="bg-gray-300 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col justify-between">
+      <h1 className="font-bold text-2xl mb-12 text-center mt-12">
         Chat :{" "}
-        <span className="font-semibold text-green-700">
-          {currentRoom
-            ? currentRoom
-            : "Nenhuma sala selecionada clique ao lado"}
+        <span className="font-semibold text-pink-900">
+          {currentRoom ? currentRoom : "Clique em alguma sala"}
         </span>
       </h1>
-      <div className="max-w-2xl w-full h-full items-center justify-center m-auto">
-        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4">
+      <div className="max-w-2xl w-full h-full items-center justify-center  mt-12">
+        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4 ">
           {chatMessages.map((msg: any, index: any) => (
             <p key={index} className="mb-2 flex">
               <img
@@ -102,25 +100,26 @@ export default function ChatMessage() {
             </p>
           ))}
         </div>
+        {currentRoom.length > 1 && (
+          <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center mt-auto">
+            <input
+              type="text"
+              name="message"
+              value={currentMessage}
+              onKeyUp={handleKeyPress}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              placeholder="Digite sua mensagem..."
+              className="flex-1 p-3 border border-gray-300 rounded mx-6 focus:outline-none focus:ring focus:border-blue-400"
+            />
 
-        <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center">
-          <input
-            type="text"
-            name="message"
-            value={currentMessage}
-            onKeyUp={handleKeyPress}
-            onChange={(e) => setCurrentMessage(e.target.value)}
-            placeholder="Digite sua mensagem..."
-            className="flex-1 p-3 border border-gray-300 rounded mx-6 focus:outline-none focus:ring focus:border-blue-400"
-          />
-
-          <button
-            onClick={handlerSendMessage}
-            className="bg-slate-500  hover:bg-blue-400 text-white px-4 py-2 rounded font-medium"
-          >
-            <Send />
-          </button>
-        </div>
+            <button
+              onClick={handlerSendMessage}
+              className="bg-slate-500  hover:bg-blue-400 text-white px-4 py-2 rounded font-medium"
+            >
+              <Send />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
