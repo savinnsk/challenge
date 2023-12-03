@@ -33,7 +33,9 @@ export default function ChatMessage() {
   }, []);
 
   useEffect(() => {
-    const socketInit = io("ws://localhost:3002");
+    const socketInit = io(
+      process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:3002"
+    );
     setSocket(socketInit);
 
     return () => {
