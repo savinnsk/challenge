@@ -22,6 +22,7 @@ interface FormValues {
   nickname: string;
   email: string;
   password: string;
+  photoUrl: string;
 }
 
 export const useStore = create<Store>((set, get) => {
@@ -30,6 +31,7 @@ export const useStore = create<Store>((set, get) => {
     nickname: "",
     email: "",
     password: "",
+    photoUrl: "",
     error: null,
     socket: null,
     isLogged: false,

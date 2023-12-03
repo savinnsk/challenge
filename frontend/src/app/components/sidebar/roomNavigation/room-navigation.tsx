@@ -66,7 +66,7 @@ export function RoomNavigation() {
       <p className="m-2 font-extrabold  text-white">SALAS DE CHAT</p>
 
       {rooms.map((room: any) => (
-        <p className="flex" key={room.id}>
+        <div className="flex" key={room.id}>
           <button
             onClick={() => handleRoomChange(room.name)}
             className="flex bg-slate-600 hover:bg-slate-500  items-center gap-3 rounded px-3 py-2 "
@@ -89,7 +89,7 @@ export function RoomNavigation() {
             onClose={handleCloseModal}
             onConfirm={() => handleConfirmDeleteRoom(room.id)}
           />
-        </p>
+        </div>
       ))}
     </nav>
   );
