@@ -1,5 +1,6 @@
 "use client";
 import { useStore } from "@/store";
+
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { Send } from "lucide-react";
@@ -77,14 +78,16 @@ export default function ChatMessage() {
   };
   return (
     <div className="bg-gray-300 p-4 md:p-8 text-gray-800 min-h-screen flex flex-col justify-between">
-      <h1 className="font-bold text-2xl mb-12 text-center mt-12">
+      <h1 className="font-bold text-2xl mb-12 text-center mt-4">
         Chat :{" "}
-        <span className="font-semibold text-pink-900">
-          {currentRoom ? currentRoom : "Clique em alguma sala"}
+        <span className="font-semibold text-slate-700">
+          {currentRoom
+            ? currentRoom
+            : "Nenhuma sala selecionada clique ao lado"}
         </span>
       </h1>
       <div className="max-w-2xl w-full h-full items-center justify-center  mt-12">
-        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4 ">
+        <div className="messages-container overflow-y-auto flex-grow mb-6 bg-gray-200 rounded p-4">
           {chatMessages.map((msg: any, index: any) => (
             <p key={index} className="mb-2 flex">
               <img
