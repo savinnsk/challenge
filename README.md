@@ -1,6 +1,6 @@
 # play-for-a-cause-challenge
 
-### Projeto para o desafio da play for a cayse
+### Projeto para o desafio da play for a cause
 
 **API DOCS** : http://54.234.157.163:3002/api
 
