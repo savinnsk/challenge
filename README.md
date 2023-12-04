@@ -1,4 +1,4 @@
-# pay-for-a-cause-challenge
+# play-for-a-cause-challenge
 
 ### Projeto para o desafio da play for a cayse
 
