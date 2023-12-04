@@ -8,8 +8,8 @@ export const createUserSchema = z.object({
   nickname: z
     .string()
     .min(3, { message: "O apelido/nickname deve ter no mínimo 3 caracteres" })
-    .max(10, {
-      message: "O apelido/nickname deve ter no máximo 10 caracteres",
+    .max(20, {
+      message: "O apelido/nickname deve ter no máximo 20 caracteres",
     }),
   email: z.string().email({ message: "O email fornecido não é válido" }),
   password: z
@@ -26,8 +26,8 @@ export const updateUserSchema = z.object({
   nickname: z
     .string()
     .min(3, { message: "O apelido/nickname deve ter no mínimo 3 caracteres" })
-    .max(10, {
-      message: "O apelido/nickname deve ter no máximo 10 caracteres",
+    .max(20, {
+      message: "O apelido/nickname deve ter no máximo 20 caracteres",
     })
     .optional(),
   email: z

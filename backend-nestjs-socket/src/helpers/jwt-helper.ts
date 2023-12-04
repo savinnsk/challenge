@@ -5,9 +5,9 @@ import { UserPayloadJwt } from 'src/domain/user-payload-jwt';
 export const jwtHelper = {
   decrypt: async (value: string): Promise<string> => {
     try {
-      const user = await verify(value, authConfig().jwtSecret);
+      const user: any = await verify(value, authConfig().jwtSecret);
 
-      return user as string;
+      return user.payload as string;
     } catch (error) {
       console.log(error);
     }
