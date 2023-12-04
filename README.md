@@ -2,6 +2,9 @@
 
 ### Projeto para o desafio da play for a cayse
 
+**API DOCS** : http://54.234.157.163:3002/api
+**APP FRONT** : http://54.234.157.163:3000/auth
+
 Um chat, com opção de criar deletar chats, e conversar com todos conectados
 Nesse repositorio temos o fronend e o backend
 
