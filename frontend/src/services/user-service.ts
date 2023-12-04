@@ -57,7 +57,6 @@ export const FindOneUser = async ({
   userToken: string | null;
 }) => {
   try {
-    console.log(userToken);
     const response = await axiosConfig.get(`users`, {
       headers: {
         Authorization: `Bearer ${userToken}`,
@@ -72,7 +71,6 @@ export const FindOneUser = async ({
 
 export const LoginUserService = async (data: any) => {
   try {
-    console.log("data", data);
     const response = await axiosConfig.post(`login`, data, {});
 
     return response;

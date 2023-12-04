@@ -1,14 +1,15 @@
 "use client";
 
 import { useStore } from "@/store";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { MessageSquare, Trash2 } from "lucide-react";
 import ConfirmationModal from "../../modalConfirmation/modalComfirmation";
 import { deleteRoomService } from "@/services/room-service";
 export function RoomNavigation() {
-  const { rooms, fetchRooms, verifyUserSession } = useStore();
+  const { rooms, fetchRooms } = useStore();
 
-  let userToken = localStorage.getItem("userToken");
+  let userToken =
+    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
   const { socket, setCurrentRoom, currentRoom } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,13 +53,6 @@ export function RoomNavigation() {
   };
 
   useEffect(() => {
-    const session = verifyUserSession(userToken);
-    session.then((res: any) => {
-      if (res.status != 200) {
-        window.location.href = "/auth";
-      }
-    });
-
     fetchRooms(userToken);
   }, [fetchRooms]);
   return (

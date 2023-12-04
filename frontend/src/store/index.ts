@@ -14,7 +14,8 @@ interface Store {
   rooms: [];
   fetchRooms: (userToken: string | null) => void;
   setFormValues: (formValues: Partial<FormValues>) => void;
-  verifyUserSession: (token: string | null) => boolean | any;
+  userToken: string | null;
+  setUserToken: (token: string | null) => void;
 }
 
 interface FormValues {
@@ -31,12 +32,13 @@ export const useStore = create<Store>((set, get) => {
     nickname: "",
     email: "",
     password: "",
-    photoUrl: "",
+    photo: "",
     error: null,
     socket: null,
     isLogged: false,
     currentRoom: "",
     currentUser: null,
+    userToken: null,
     rooms: [],
 
     setCurrentUser: (user: any) => set({ currentUser: user }), // Set the current user
@@ -59,19 +61,6 @@ export const useStore = create<Store>((set, get) => {
         return error;
       }
     },
-    verifyUserSession: async (userToken: string | null) => {
-      try {
-        const user = await axiosConfig.get("/users", {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-        });
-
-        return user;
-      } catch (error) {
-        console.error("Error to get user session:", error);
-        return error;
-      }
-    },
+    setUserToken: (token: string | null) => set({ userToken: token }),
   };
 });

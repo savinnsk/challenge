@@ -6,27 +6,19 @@ import { useStore } from "@/store";
 import { UpdateUserFormData, updateUserSchema } from "@/schemas/form-schemas";
 import { ZodError } from "zod";
 import ErrorPopup from "../errorPopUp/errorPopUp";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export const UpdateUserForm = () => {
   const formData = useStore((state: any) => state);
   const setFormValues = useStore((state) => state.setFormValues);
-  const { error, setError, verifyUserSession } = useStore();
-  const userToken = localStorage.getItem("userToken");
+  const { error, setError } = useStore();
+  let userToken =
+    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
 
   useEffect(() => {
-    const session = verifyUserSession(userToken);
-
-    session.then((res: any) => {
-      if (!res.data.name) {
-        window.location.href = "/auth";
-      }
-    });
     const user = FindOneUser({ userToken });
-
     user.then((user) => {
       Object.keys(user).forEach((field) => {
-        console.log(field);
         setFormValues({ [field]: user[field] });
       });
     });
@@ -36,18 +28,18 @@ export const UpdateUserForm = () => {
     e.preventDefault();
 
     try {
-      const { name, nickname, email, password, photoUrl } = formData;
+      const { name, nickname, email, password, photo } = formData;
 
       const data: UpdateUserFormData = updateUserSchema.parse({
         name,
         nickname,
         email,
         password,
-        photoUrl,
+        photo,
       });
 
       const user: any = await UpdateUserService({ data, userToken });
-      console.log("result update", user);
+
       if (user.response?.status == 409) {
         setError("Email ou Nickname já está em uso!");
         return;

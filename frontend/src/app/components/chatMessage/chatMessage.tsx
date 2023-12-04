@@ -7,24 +7,14 @@ import { Send } from "lucide-react";
 import { FindOneUser } from "@/services/user-service";
 
 export default function ChatMessage() {
-  const { setSocket, socket, currentRoom, setCurrentRoom, verifyUserSession } =
-    useStore();
+  const { setSocket, socket, currentRoom, setCurrentRoom } = useStore();
   const [currentMessage, setCurrentMessage] = useState("");
   const [chatMessages, setChatMessages] = useState<any>([]);
   const [user, setUser] = useState<any>(null);
-  const userToken = localStorage.getItem("userToken");
-  if (!userToken) {
-    window.location.href = "/auth";
-  }
+  let userToken =
+    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
 
   useEffect(() => {
-    const session: any = verifyUserSession(userToken);
-
-    session.then((res: any) => {
-      if (!res.data.name) {
-        window.location.href = "/auth";
-      }
-    });
     const user = FindOneUser({ userToken });
 
     user.then((values) => {
