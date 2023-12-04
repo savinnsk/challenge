@@ -58,7 +58,14 @@ export class UsersService {
     userToken: string;
   }) {
     try {
-      const userId: any = await jwtHelper.decrypt(userToken);
+      let userId;
+      const userPayload: any = await jwtHelper.decrypt(userToken);
+
+      if (userPayload.payload) {
+        userId = userPayload.payload;
+      } else {
+        userId = userPayload;
+      }
 
       const existingUser = await this.prisma.user.findUnique({
         where: {
@@ -89,7 +96,14 @@ export class UsersService {
 
   async getUser({ userToken }: { userToken: string }) {
     try {
-      const userId: any = await jwtHelper.decrypt(userToken);
+      let userId;
+      const userPayload: any = await jwtHelper.decrypt(userToken);
+
+      if (userPayload.payload) {
+        userId = userPayload.payload;
+      } else {
+        userId = userPayload;
+      }
 
       const user = await this.prisma.user.findUnique({
         where: {
@@ -111,7 +125,14 @@ export class UsersService {
 
   async deleteUser({ userToken }: { userToken: string }) {
     try {
-      const userId: any = await jwtHelper.decrypt(userToken);
+      let userId;
+      const userPayload: any = await jwtHelper.decrypt(userToken);
+
+      if (userPayload.payload) {
+        userId = userPayload.payload;
+      } else {
+        userId = userPayload;
+      }
 
       const user = await this.prisma.user.delete({
         where: {

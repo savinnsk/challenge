@@ -42,3 +42,17 @@ export const createRoomService = async (data: {
     return err;
   }
 };
+
+export const fetchRoomsService = async (userToken: string | null) => {
+  try {
+    const response = await axiosConfig.get("/rooms", {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching rooms:", error);
+    return error;
+  }
+};

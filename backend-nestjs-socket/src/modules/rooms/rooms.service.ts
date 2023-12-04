@@ -19,9 +19,16 @@ export class RoomsService {
     userToken: string;
   }) {
     try {
-      const user = await jwtHelper.decrypt(userToken);
+      let userId;
+      const userPayload: any = await jwtHelper.decrypt(userToken);
 
-      Object.assign(data, { userId: user.sub });
+      if (userPayload.payload) {
+        userId = userPayload.payload;
+      } else {
+        userId = userPayload;
+      }
+
+      Object.assign(data, { userId: userId.sub });
 
       return this.prismaService.room.create({ data });
     } catch (error) {
@@ -31,7 +38,14 @@ export class RoomsService {
 
   async listAllRooms({ userToken }: { userToken: string }) {
     try {
-      const user: any = await jwtHelper.decrypt(userToken);
+      let userId;
+      const userPayload: any = await jwtHelper.decrypt(userToken);
+
+      if (userPayload.payload) {
+        userId = userPayload.payload;
+      } else {
+        userId = userPayload;
+      }
 
       const rooms = await this.prismaService.room.findMany();
 
@@ -39,7 +53,7 @@ export class RoomsService {
         id: room.id,
         name: room.name,
         welcomeMessage: room.welcomeMessage,
-        owner: room.userId === user.sub,
+        owner: room.userId === userId.sub,
       }));
 
       return roomsWithOwnership;

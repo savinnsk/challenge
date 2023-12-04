@@ -7,7 +7,7 @@ export const jwtHelper = {
     try {
       const user: any = await verify(value, authConfig().jwtSecret);
 
-      return user.payload as string;
+      return user as string;
     } catch (error) {
       console.log(error);
     }
