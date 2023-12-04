@@ -1,17 +1,17 @@
 "use client";
 
 import { useStore } from "@/store";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageSquare, Trash2 } from "lucide-react";
 import ConfirmationModal from "../../modalConfirmation/modalComfirmation";
 import { deleteRoomService } from "@/services/room-service";
 export function RoomNavigation() {
   const { rooms, fetchRooms } = useStore();
 
-  let userToken =
-    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
   const { socket, setCurrentRoom, currentRoom } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  let userToken =
+    typeof window !== "undefined" ? localStorage.getItem("userToken") : null;
 
   useEffect(() => {
     if (socket) {
@@ -41,7 +41,9 @@ export function RoomNavigation() {
 
     if (response.status == 200) {
       fetchRooms(userToken);
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     }
     setIsModalOpen(false);
   };

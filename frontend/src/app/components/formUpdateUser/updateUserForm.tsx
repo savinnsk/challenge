@@ -17,8 +17,10 @@ export const UpdateUserForm = () => {
 
   useEffect(() => {
     const user = FindOneUser({ userToken });
+
     user.then((user) => {
       Object.keys(user).forEach((field) => {
+        console.log(field);
         setFormValues({ [field]: user[field] });
       });
     });
@@ -52,7 +54,9 @@ export const UpdateUserForm = () => {
 
       localStorage.setItem("nickname", user.nickname);
 
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.errors.map((err) => err.message).join("\n");

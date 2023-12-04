@@ -39,7 +39,9 @@ export const CreateUserForm = () => {
       localStorage.setItem("userToken", user.accessToken);
       localStorage.setItem("nickname", user.nickname);
 
-      window.location.href = "/chat";
+      if (typeof window !== "undefined") {
+        window.location.href = "/chat";
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         const errorMessage = error.errors.map((err) => err.message).join("\n");
